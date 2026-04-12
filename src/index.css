@@ -1,22 +1,30 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&display=swap");
 @import "tailwindcss";
 
 @theme {
+  /* Font */
+  --font-sans: "Inter", sans-serif;
+  --font-lora: "Lora", serif;
+
   /* Brand */
-  --primary: #9a0002;
-  --secondary: #fff8f3;
-  --tertiary: #fff;
-  --accent: #fff;
+  --color-primary: #8b0e15;
+  --color-secondary: #fff8f3;
+  --color-tertiary: #fff;
+  --color-accent: #fff;
 
   /* Status */
-  --success: #fff;
-  --warning: #fff;
-  --danger: #fff;
-  --info: #fff;
+  --color-success: #fff;
+  --color-warning: #fff;
+  --color-danger: #fff;
+  --color-info: #fff;
 
   /* Layout & text */
-  --bg-main: #fff8f3;
-  --bg-surface: #fff;
-  --text-primary: #ffffff;
-  --text-secondary: #fff;
-  --text-inverse: #fff;
+  --color-bg-main: #fff8f3;
+  --color-bg-surface: #fff;
+  --color-text-primary: #ffffff;
+  --color-text-secondary: #ffcccc;
+  --color-text-inverse: #fff;
+  --color-text-dark: #222222;
+  --color-text-light: #666;
 }
