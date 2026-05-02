@@ -11,8 +11,9 @@ import {
   chocolateFudgeTruffleCheesecake,
   simpleValentineDayCupcakesRecipeCelebrateLoveDeliciously,
   vanillaCupcakeswithSweetButtercreamFrosting,
-} from "../assets/homePage";
-import headerCream from "../assets/homePage/header/theProminentOrganicDrippingCreamMaskTransitionMask.png";
+} from "../../assets/homePage";
+import headerCream from "../../assets/homePage/header/theProminentOrganicDrippingCreamMaskTransitionMask.png";
+import { Link } from "react-router-dom";
 
 function Home() {
   return (
@@ -38,9 +39,12 @@ function Home() {
               icon={faCartShopping}
               className="mr-4 text-primary"
             />
-            <button className="bg-primary text-white px-6 py-3 rounded-[30px] text-[13px] font-semibold uppercase tracking-[1px] cursor-pointer transition-all duration-300">
-              ORDER NOW
-            </button>
+            <Link
+              to="/login"
+              className="bg-primary text-white px-6 py-3 rounded-[30px] text-[13px] font-semibold uppercase tracking-[1px] cursor-pointer transition-all duration-300"
+            >
+              Sign in
+            </Link>
           </div>
         </div>
       </header>
