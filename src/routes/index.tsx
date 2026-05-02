@@ -1,5 +1,5 @@
 import { createBrowserRouter, Navigate } from "react-router-dom";
-import { Login, Home } from "../pages/public";
+import { Login, Register, Home } from "../pages/public";
 import { Dashboard } from "../pages/admin";
 import { Profile } from "../pages/user";
 import ProtectedRoute from "./ProtectedRoute";
@@ -28,6 +28,10 @@ export const router = createBrowserRouter([
       {
         path: "/login",
         element: <Login />,
+      },
+      {
+        path: "/register",
+        element: <Register />,
       },
     ],
   },
