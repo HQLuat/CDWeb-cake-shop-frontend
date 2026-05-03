@@ -1,10 +1,11 @@
 import { createBrowserRouter, Navigate } from "react-router-dom";
-import { Login, Register, Home } from "../pages/public";
+import { AuthPage, Home } from "../pages/public";
 import { Dashboard } from "../pages/admin";
 import { Profile } from "../pages/user";
 import ProtectedRoute from "./ProtectedRoute";
 import PublicLayout from "../layouts/publicLayout";
-import AuthLayout from "../layouts/authLayout";
+import LoginForm from "../features/auth/LoginForm";
+import RegisterForm from "../features/auth/RegisterForm";
 
 export const router = createBrowserRouter([
   // --- PUBLIC ROUTES ---
@@ -23,15 +24,15 @@ export const router = createBrowserRouter([
     ],
   },
   {
-    element: <AuthLayout />,
+    element: <AuthPage />,
     children: [
       {
         path: "/login",
-        element: <Login />,
+        element: <LoginForm />,
       },
       {
         path: "/register",
-        element: <Register />,
+        element: <RegisterForm />,
       },
     ],
   },
