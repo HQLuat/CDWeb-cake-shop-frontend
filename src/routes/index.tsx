@@ -1,5 +1,5 @@
 import { createBrowserRouter, Navigate } from "react-router-dom";
-import { AuthPage, Home } from "../pages/public";
+import { AuthPage, HomePage } from "../pages/public";
 import { Dashboard } from "../pages/admin";
 import { Profile } from "../pages/user";
 import ProtectedRoute from "./ProtectedRoute";
@@ -19,7 +19,7 @@ export const router = createBrowserRouter([
       },
       {
         path: "/home",
-        element: <Home />,
+        element: <HomePage />,
       },
     ],
   },
