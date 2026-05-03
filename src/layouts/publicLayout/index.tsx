@@ -1,9 +1,13 @@
 import { Outlet } from "react-router-dom";
+import Header from "./Header";
+import Footer from "./Footer";
 
 function PublicLayout() {
   return (
-    <div>
+    <div className="bg-secondary">
+      <Header />
       <Outlet />
+      <Footer />
     </div>
   );
 }
