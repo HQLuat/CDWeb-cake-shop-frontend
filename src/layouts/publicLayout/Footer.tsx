@@ -5,7 +5,7 @@ function Footer() {
         {/* Footer left */}
         <div className="w-[30%]">
           <div className="font-lora text-[20px] font-semibold text-primary mb-2.5">
-            Luna Artisan Bakery
+            Velvet Muse Bakery
           </div>
           <p className="text-[12px] text-text-light">
             Artisan baking with a modern artistic vision. Every crumb tells a
@@ -41,7 +41,7 @@ function Footer() {
         </div>
         {/* Footer right */}
         <div className="text-[12px] text-[#999]">
-          © 2024 ARTISAN EDITORIAL. HANDCRAFTED WITH LOVE.
+          © 2026 ARTISAN EDITORIAL. HANDCRAFTED WITH LOVE.
         </div>
       </div>
     </footer>

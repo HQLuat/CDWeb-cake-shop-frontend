@@ -6,6 +6,7 @@ import ProtectedRoute from "./ProtectedRoute";
 import PublicLayout from "../layouts/publicLayout";
 import LoginForm from "../features/auth/LoginForm";
 import RegisterForm from "../features/auth/RegisterForm";
+import ProductDetailPage from "../pages/public/ProductDetailPage";
 
 export const router = createBrowserRouter([
   // --- PUBLIC ROUTES ---
@@ -20,6 +21,10 @@ export const router = createBrowserRouter([
       {
         path: "/home",
         element: <HomePage />,
+      },
+      {
+        path: "/product/:id",
+        element: <ProductDetailPage />,
       },
     ],
   },
