@@ -9,6 +9,7 @@ import {
   vanillaCupcakeswithSweetButtercreamFrosting,
 } from "../../assets/homePage";
 import headerCream from "../../assets/homePage/header/theProminentOrganicDrippingCreamMaskTransitionMask.png";
+import { Link } from "react-router-dom";
 
 function Home() {
   return (
@@ -26,8 +27,7 @@ function Home() {
               Handcrafted Moments
             </h1>
             <p className="text-[15px] mb-7.5 opacity-90">
-              Elevating the art of baking through liquid organicism and heritage
-              flavors. Experience the velvet texture of true artisan mastery
+              Nâng tầm nghệ thuật làm bánh qua sự thuần khiết từ nguyên liệu hữu cơ và hương vị di sản. Hãy trải nghiệm kết cấu mềm mịn như nhung từ những bậc thầy thủ công thực thụ.
             </p>
             <div className="flex gap-3.75">
               <button className="bg-white text-text-dark px-6 py-3 rounded-[30px] text-[13px] font-semibold uppercase tracking-[1px] cursor-pointer transition-all duration-300">
@@ -57,6 +57,43 @@ function Home() {
         </div>
       </section>
 
+      {/* Categories Section */}
+      <section className="py-12 bg-bg-main">
+        <div className="max-w-[1200px] mx-auto px-5">
+          <div className="text-center mb-10">
+            <h2 className="font-lora text-[32px] text-primary">Browse by Category</h2>
+            <p className="text-text-light text-[14px] mt-2">Khám phá bộ sưu tập bánh thủ công tinh tế của chúng tôi</p>
+          </div>
+          
+          <div className="flex justify-center flex-wrap gap-8 md:gap-12">
+            {/* Category Item */}
+            {[
+              { name: "Cakes", icon: "🎂", count: "12 Items" },
+              { name: "Sourdough", icon: "🥖", count: "8 Items" },
+              { name: "Macarons", icon: "🍪", count: "15 Items" },
+              { name: "Cupcakes", icon: "🧁", count: "10 Items" },
+              { name: "Pastries", icon: "🥐", count: "9 Items" },
+              { name: "Red Velvet", icon: "🍰", count: "5 Items" },
+            ].map((cat, index) => (
+              <div 
+                key={index} 
+                className="group flex flex-col items-center cursor-pointer"
+              >
+                <div className="w-20 h-20 md:w-24 md:h-24 rounded-full bg-white shadow-md flex items-center justify-center text-3xl group-hover:bg-primary group-hover:text-white transition-all duration-500 transform group-hover:-translate-y-2">
+                  {cat.icon}
+                </div>
+                <h4 className="mt-4 font-lora font-semibold text-[16px] text-text-dark group-hover:text-primary transition-colors">
+                  {cat.name}
+                </h4>
+                <span className="text-[11px] uppercase tracking-wider text-text-light opacity-0 group-hover:opacity-100 transition-opacity">
+                  {cat.count}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Features */}
       <section className="py-25">
         <div className="max-w-300 m-auto px-5 flex justify-between">
@@ -77,8 +114,7 @@ function Home() {
                 Quality Ingredients
               </h3>
               <p className="text-[14px] text-text-light">
-                We source only organic AOP butter from France and single-origin
-                chocolate for a depth of flavor that defines our legacy.
+                Chúng tôi chỉ sử dụng bơ hữu cơ AOP từ Pháp và socola nguyên bản (single-origin) để tạo nên chiều sâu hương vị đặc trưng cho thương hiệu
               </p>
             </div>
             <div>
@@ -87,8 +123,7 @@ function Home() {
                 Fresh Daily Baking
               </h3>
               <p className="text-[14px] text-text-light">
-                Our ovens never rest. Every croissant is laminated by hand and
-                baked to golden perfection just before our doors open.
+                Lò nướng của chúng tôi chưa bao giờ nghỉ. Mỗi chiếc bánh sừng bò đều được cán tay thủ công và nướng chín vàng hoàn hảo ngay trước giờ mở cửa.
               </p>
             </div>
           </div>
@@ -129,9 +164,11 @@ function Home() {
                   72-hour fermentation process using our heritage starter,
                   yielding a complex tang and perfectly charred crust.
                 </p>
-                <button className="bg-primary text-white w-full p-2.5 rounded-[20px] border border-solid border-primary text-[12px] font-semibold uppercase tracking-[1px] cursor-pointer transition duration-300">
-                  Add to Cart
-                </button>
+                 <Link 
+                  to="/product/sourdough-01" 
+                  className="bg-primary text-white text-center w-full p-2.5 rounded-[20px] border border-solid border-primary text-[12px] font-semibold uppercase tracking-[1px] cursor-pointer transition duration-300 hover:bg-white hover:text-primary">
+                 View Selection
+                </Link>
               </div>
               <div className="w-[60%] h-full bg-white">
                 <img src={bake1} alt="Sourdough" className="w-full h-100" />
@@ -155,9 +192,11 @@ function Home() {
                 <p className="text-[13px] text-text-light mb-5 grow">
                   Twice-baked with premium almond frangipane.
                 </p>
-                <button className="w-full p-2.5 rounded-[20px] border border-solid border-primary bg-transparent text-primary text-[12px] font-semibold uppercase cursor-pointer transition duration-300 tracking-[1px]">
-                  Add to Cart
-                </button>
+                 <Link 
+                  to="/product/sourdough-01" 
+                  className="bg-primary text-white text-center w-full p-2.5 rounded-[20px] border border-solid border-primary text-[12px] font-semibold uppercase tracking-[1px] cursor-pointer transition duration-300 hover:bg-white hover:text-primary">
+                 View Selection
+                </Link>
               </div>
             </div>
             <div className="bg-bg-surface rounded-[15px] overflow-hidden flex flex-col">
@@ -175,9 +214,11 @@ function Home() {
                   </h3>
                   <span className="text-primary font-semibold">$4.00</span>
                 </div>
-                <button className="w-full p-2.5 rounded-[20px] border border-solid border-primary bg-transparent text-primary text-[12px] font-semibold uppercase cursor-pointer transition duration-300 tracking-[1px]">
-                  Quick Add
-                </button>
+                <Link 
+                  to="/product/sourdough-01" 
+                  className="bg-primary text-white text-center w-full p-2.5 rounded-[20px] border border-solid border-primary text-[12px] font-semibold uppercase tracking-[1px] cursor-pointer transition duration-300 hover:bg-white hover:text-primary">
+                 View Selection
+                </Link>
               </div>
             </div>
             <div className="bg-bg-surface rounded-[15px] overflow-hidden flex flex-col">
@@ -195,9 +236,11 @@ function Home() {
                   </h3>
                   <span className="text-primary font-semibold">$8.00</span>
                 </div>
-                <button className="w-full p-2.5 rounded-[20px] border border-solid border-primary bg-transparent text-primary text-[12px] font-semibold uppercase cursor-pointer transition duration-300 tracking-[1px]">
-                  Quick Add
-                </button>
+                <Link 
+                  to="/product/sourdough-01" 
+                  className="bg-primary text-white text-center w-full p-2.5 rounded-[20px] border border-solid border-primary text-[12px] font-semibold uppercase tracking-[1px] cursor-pointer transition duration-300 hover:bg-white hover:text-primary">
+                 View Selection
+                </Link>
               </div>
             </div>
             <div className="bg-bg-surface rounded-[15px] overflow-hidden flex flex-col">
@@ -215,21 +258,74 @@ function Home() {
                   </h3>
                   <span className="text-primary font-semibold">$24.00</span>
                 </div>
-                <button className="w-full p-2.5 rounded-[20px] border border-solid border-primary bg-transparent text-primary text-[12px] font-semibold uppercase cursor-pointer transition duration-300 tracking-[1px]">
-                  Box of 12
-                </button>
+                <Link 
+                  to="/product/sourdough-01" 
+                  className="bg-primary text-white text-center w-full p-2.5 rounded-[20px] border border-solid border-primary text-[12px] font-semibold uppercase tracking-[1px] cursor-pointer transition duration-300 hover:bg-white hover:text-primary">
+                 View Selection
+                </Link>
               </div>
             </div>
           </div>
         </div>
       </section>
 
+      {/*  ARTISAN PROCESS */}
+        <section className="py-20 bg-bg-main overflow-hidden">
+          <div className="max-w-300 mx-auto px-5">
+            <div className="flex flex-col md:flex-row items-center gap-15">
+              <div className="w-full md:w-1/2 relative">
+                <div className="grid grid-cols-2 gap-4">
+                  <img src={bake1} alt="Process 1" className="rounded-2xl mt-8 shadow-lg" />
+                  <img src={bake2} alt="Process 2" className="rounded-2xl shadow-lg" />
+                </div>
+                <div className="absolute -z-10 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-primary/5 rounded-full blur-3xl"></div>
+              </div>
+              
+              <div className="w-full md:w-1/2">
+                <span className="text-primary font-medium uppercase tracking-[2px] text-[12px]">Our Secret</span>
+                <h2 className="font-lora text-[40px] leading-tight mt-4 mb-6">Meticulously Crafted <br/> From Grain to Crust</h2>
+                <p className="text-text-light text-[15px] mb-8 leading-relaxed">
+                  Chúng tôi không chỉ làm bánh, chúng tôi tạo ra những trải nghiệm. Mỗi mẻ bánh Red Velvet tại <strong>Velvet Muse</strong> đều tuân thủ quy trình ủ lạnh 24h để đạt được kết cấu nhung mịn hoàn hảo mà không tiệm bánh công nghiệp nào có được.
+                </p>
+                <ul className="space-y-4">
+                  {['100% Organic Ingredients', 'Traditional Slow-Fermentation', 'Hand-laminated Layers'].map((item, i) => (
+                    <li key={i} className="flex items-center gap-3 text-[14px] font-medium">
+                      <span className="w-5 h-5 rounded-full bg-primary/10 text-primary flex items-center justify-center text-[10px]">✔</span>
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/*TESTIMONIALS */}
+        <section className="py-20 bg-white">
+          <div className="max-w-300 mx-auto px-5 text-center">
+            <h2 className="font-lora text-[32px] mb-12 text-primary text-center">Loved by Dessert Enthusiasts</h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {[
+                {name: "Sophia Chen", comment: "Bánh Red Velvet ở đây thực sự là cực phẩm! Lớp kem cheese không quá ngọt, mịn như lụa."},
+                {name: "James Wilson", comment: "Sourdough giòn tan bên ngoài nhưng dai mềm bên trong. Hương vị lên men rất sâu sắc."},
+                {name: "Elena Tran", comment: "Không gian tiệm thơ mộng và bánh thì luôn tươi mới mỗi sáng. Rất đáng trải nghiệm!"}
+              ].map((review, i) => (
+                <div key={i} className="p-8 rounded-2xl bg-bg-surface border border-gray-50 hover:shadow-xl transition-shadow">
+                  <div className="text-yellow-500 mb-4">★★★★★</div>
+                  <p className="italic text-text-light text-[14px] mb-6">"{review.comment}"</p>
+                  <div className="font-semibold text-primary">— {review.name}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
       {/* Newsletter */}
       <section className="pb-25 bg-white">
         <div className="max-w-300 m-auto px-5">
           <div className="bg-primary rounded-[20px] py-15 px-5 text-center text-white relative overflow-hidden before:content-[''] before:absolute before:-bottom-12.5 before:-left-12.5 before:w-50 before:h-50 before:bg-[rgba(255,255,255,0.05)] before:rounded-[50%] after:content-[''] after:absolute after:-top-12.5 after:-right-12.5 after:w-50 after:h-50 after:bg-[rgba(255,255,255,0.05)] after:rounded-[50%]">
             <h2 className="font-lora text-[36px] mb-3.75">
-              Join the Luna Artisan
+              Join the Velvet Muse
             </h2>
             <p className="text-[14px] opacity-[0.8] max-w-125 mx-auto mb-7.5 ">
               Subscribe to receive exclusive seasonal menus, baking secrets from
