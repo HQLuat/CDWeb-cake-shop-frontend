@@ -1,65 +1,107 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { 
-  faStar, 
-  faTruckFast, 
-  faCheckCircle, 
-  faMinus, 
-  faPlus,
-  faLeaf
+  faStar, faTruckFast, faCheckCircle, 
+  faMinus, faPlus, faLeaf 
 } from "@fortawesome/free-solid-svg-icons";
-import { bake1 } from "../../assets/homePage"; 
+import { bake1 } from "../../assets/homePage";
+
+// Khai báo kiểu dữ liệu khớp với ProductDetailDTO từ backend
+interface ReviewDTO {
+  id: number;
+  customerName: string;
+  rating: number;
+  comment: string;
+  createdAt: string;
+}
+
+interface ProductDetail {
+  id: number;
+  name: string;
+  price: number;
+  description: string;
+  detailDescription: string;
+  storageGuide: string;
+  collection: string;
+  shippingInfo: string;
+  ingredients: string[];
+  freshGuarantee: boolean;
+  averageRating: number;
+  totalReviews: number;
+  imageUrls: string[];
+  reviews: ReviewDTO[];
+}
 
 function ProductDetail() {
+  const { id } = useParams<{ id: string }>();
   const [quantity, setQuantity] = useState(1);
+  const [product, setProduct] = useState<ProductDetail | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [activeTab, setActiveTab] = useState<"detail" | "storage">("detail");
 
-  const product = {
-    name: "Red Velvet Muse Cake",
-    price: 45.00,
-    rating: 5,
-    reviews: 128,
-    description: "Chiếc bánh Red Velvet đặc trưng của chúng tôi mang đến trải nghiệm vị giác khó quên. Với kết cấu mềm mịn như nhung, kết hợp cùng lớp kem cheese tươi mát và một chút hương cacao nhẹ nhàng, đây chính là hiện thân của sự tinh tế và ngọt ngào.",
-    ingredients: ["Bơ hữu cơ AOP", "Bột mì thượng hạng", "Phô mai tươi", "Trứng gà thả vườn"],
-    shipping: "Giao hàng nhanh trong 2h tại nội thành"
-  };
+  useEffect(() => {
+    fetch(`http://localhost:8080/api/products/${id}`)
+      .then(res => res.json())
+      .then((data: ProductDetail) => {
+        setProduct(data);
+        setLoading(false);
+      })
+      .catch(err => {
+        console.error("Lỗi fetch sản phẩm:", err);
+        setLoading(false);
+      });
+  }, [id]);
+
+  if (loading) return (
+    <main className="mt-28 mb-20 text-center text-text-light">Đang tải...</main>
+  );
+
+  if (!product) return (
+    <main className="mt-28 mb-20 text-center text-text-light">Không tìm thấy sản phẩm.</main>
+  );
 
   return (
     <main className="mt-28 mb-20">
       <div className="max-w-[1200px] mx-auto px-5">
         <div className="flex flex-col md:flex-row gap-12">
-          
-          {/* 1. Hình ảnh sản phẩm (Bên trái) */}
+
+          {/* Hình ảnh sản phẩm */}
           <div className="w-full md:w-1/2">
             <div className="sticky top-28">
               <div className="rounded-2xl overflow-hidden shadow-lg bg-bg-surface">
-                <img 
-                  src={bake1} 
-                  alt={product.name} 
+                <img
+                  src={product.imageUrls[0] || bake1}
+                  alt={product.name}
                   className="w-full h-[500px] object-cover hover:scale-105 transition-transform duration-500"
                 />
               </div>
-              {/* Ảnh nhỏ phụ (Thumbnails) */}
+              {/* Thumbnails */}
               <div className="flex gap-4 mt-4">
-                {[1, 2, 3].map((i) => (
+                {(product.imageUrls.length > 0 ? product.imageUrls : [bake1, bake1, bake1]).map((url, i) => (
                   <div key={i} className="w-20 h-20 border-2 border-primary rounded-lg overflow-hidden cursor-pointer opacity-70 hover:opacity-100 transition-all">
-                    <img src={bake1} alt="thumb" className="w-full h-full object-cover" />
+                    <img src={url} alt={`thumb-${i}`} className="w-full h-full object-cover" />
                   </div>
                 ))}
               </div>
             </div>
           </div>
 
-          {/* 2. Thông tin sản commerce (Bên phải) */}
+          {/* Thông tin sản phẩm */}
           <div className="w-full md:w-1/2">
-            <span className="text-primary font-medium uppercase tracking-widest text-xs">Signature Collection</span>
+            <span className="text-primary font-medium uppercase tracking-widest text-xs">
+              {product.collection}
+            </span>
             <h1 className="font-lora text-4xl mt-2 mb-4 text-text-dark">{product.name}</h1>
-            
+
             {/* Đánh giá */}
             <div className="flex items-center gap-2 mb-6">
               <div className="text-yellow-500 text-sm">
-                {[...Array(product.rating)].map((_, i) => <FontAwesomeIcon key={i} icon={faStar} />)}
+                {[...Array(Math.round(product.averageRating))].map((_, i) => (
+                  <FontAwesomeIcon key={i} icon={faStar} />
+                ))}
               </div>
-              <span className="text-text-light text-sm">({product.reviews} đánh giá từ khách hàng)</span>
+              <span className="text-text-light text-sm">({product.totalReviews} đánh giá từ khách hàng)</span>
             </div>
 
             {/* Giá */}
@@ -67,25 +109,19 @@ function ProductDetail() {
               ${(product.price * quantity).toFixed(2)}
             </div>
 
-            {/* Mô tả ngắn */}
+            {/* Mô tả */}
             <p className="text-text-light leading-relaxed mb-8 border-b pb-8">
               {product.description}
             </p>
 
-            {/* Lựa chọn số lượng */}
+            {/* Số lượng + Thêm vào giỏ */}
             <div className="flex items-center gap-6 mb-8">
               <div className="flex items-center border border-gray-200 rounded-full px-4 py-2">
-                <button 
-                  onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                  className="text-text-light hover:text-primary p-2"
-                >
+                <button onClick={() => setQuantity(Math.max(1, quantity - 1))} className="text-text-light hover:text-primary p-2">
                   <FontAwesomeIcon icon={faMinus} size="xs" />
                 </button>
                 <span className="px-6 font-semibold w-12 text-center">{quantity}</span>
-                <button 
-                  onClick={() => setQuantity(quantity + 1)}
-                  className="text-text-light hover:text-primary p-2"
-                >
+                <button onClick={() => setQuantity(quantity + 1)} className="text-text-light hover:text-primary p-2">
                   <FontAwesomeIcon icon={faPlus} size="xs" />
                 </button>
               </div>
@@ -98,34 +134,44 @@ function ProductDetail() {
             <div className="space-y-4 pt-4 border-t">
               <div className="flex items-center gap-3 text-sm text-text-dark">
                 <FontAwesomeIcon icon={faTruckFast} className="text-primary" />
-                <span>{product.shipping}</span>
+                <span>{product.shippingInfo}</span>
               </div>
               <div className="flex items-center gap-3 text-sm text-text-dark">
                 <FontAwesomeIcon icon={faLeaf} className="text-green-600" />
                 <span>Thành phần: {product.ingredients.join(", ")}</span>
               </div>
-              <div className="flex items-center gap-3 text-sm text-text-dark">
-                <FontAwesomeIcon icon={faCheckCircle} className="text-blue-500" />
-                <span>Đảm bảo bánh tươi mới nướng trong ngày</span>
-              </div>
+              {product.freshGuarantee && (
+                <div className="flex items-center gap-3 text-sm text-text-dark">
+                  <FontAwesomeIcon icon={faCheckCircle} className="text-blue-500" />
+                  <span>Đảm bảo bánh tươi mới nướng trong ngày</span>
+                </div>
+              )}
             </div>
-
           </div>
         </div>
 
-        {/* 3. Phần Tabs (Mô tả chi tiết / Đánh giá) */}
+        {/* Tabs */}
         <div className="mt-20">
           <div className="flex border-b gap-10 mb-8">
-            <button className="border-b-2 border-primary pb-2 font-lora font-semibold">Mô tả chi tiết</button>
-            <button className="text-text-light pb-2 font-lora hover:text-primary transition-colors">Hướng dẫn bảo quản</button>
+            <button
+              onClick={() => setActiveTab("detail")}
+              className={`pb-2 font-lora font-semibold ${activeTab === "detail" ? "border-b-2 border-primary" : "text-text-light hover:text-primary"}`}
+            >
+              Mô tả chi tiết
+            </button>
+            <button
+              onClick={() => setActiveTab("storage")}
+              className={`pb-2 font-lora ${activeTab === "storage" ? "border-b-2 border-primary font-semibold" : "text-text-light hover:text-primary"}`}
+            >
+              Hướng dẫn bảo quản
+            </button>
           </div>
           <div className="text-text-light leading-loose max-w-3xl">
-            <p className="mb-4">
-              Mỗi chiếc bánh <strong>Red Velvet Muse</strong> là một tác phẩm nghệ thuật thủ công. Chúng tôi sử dụng phương pháp trộn bột truyền thống để giữ được độ ẩm tự nhiên, kết hợp với màu đỏ chiết xuất từ củ dền hữu cơ, không sử dụng phẩm màu độc hại.
-            </p>
-            <p>
-              Lớp kem Cream Cheese được đánh bông mịn với bơ Pháp AOP, tạo nên vị chua nhẹ cân bằng hoàn hảo với độ ngọt của cốt bánh. Đây là lựa chọn lý tưởng cho các buổi tiệc kỷ niệm, quà tặng hoặc đơn giản là một buổi trà chiều sang trọng.
-            </p>
+            {activeTab === "detail" ? (
+              <p>{product.detailDescription}</p>
+            ) : (
+              <p>{product.storageGuide}</p>
+            )}
           </div>
         </div>
       </div>

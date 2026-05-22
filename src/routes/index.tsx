@@ -7,6 +7,7 @@ import PublicLayout from "../layouts/publicLayout";
 import LoginForm from "../features/auth/LoginForm";
 import RegisterForm from "../features/auth/RegisterForm";
 import ProductDetailPage from "../pages/public/ProductDetailPage";
+import ProductListPage from "../pages/public/ProductListPage";
 
 export const router = createBrowserRouter([
   // --- PUBLIC ROUTES ---
@@ -26,6 +27,10 @@ export const router = createBrowserRouter([
         path: "/product/:id",
         element: <ProductDetailPage />,
       },
+      {
+        path: "/products",
+        element: <ProductListPage />,
+      },
     ],
   },
   {
@@ -41,6 +46,7 @@ export const router = createBrowserRouter([
       },
     ],
   },
+
 
   // --- PRIVATE ROUTES ---
   {
