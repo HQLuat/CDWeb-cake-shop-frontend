@@ -141,12 +141,9 @@ function Home() {
               </span>
               <h2 className="font-lora text-[36px]">Featured Delicacies</h2>
             </div>
-            <a
-              href="#"
-              className="text-primary text-[14px] font-medium underline underline-offset-4"
-            >
-              View All Menu →
-            </a>
+           <Link to="/products" className="text-primary text-[14px] font-medium underline underline-offset-4">
+            View All Menu →
+          </Link>
           </div>
           {/* Product grid */}
           <div className="grid grid-cols-[repeat(3,1fr)] gap-6.25">
@@ -165,7 +162,7 @@ function Home() {
                   yielding a complex tang and perfectly charred crust.
                 </p>
                  <Link 
-                  to="/product/sourdough-01" 
+                  to="/product/1" 
                   className="bg-primary text-white text-center w-full p-2.5 rounded-[20px] border border-solid border-primary text-[12px] font-semibold uppercase tracking-[1px] cursor-pointer transition duration-300 hover:bg-white hover:text-primary">
                  View Selection
                 </Link>
@@ -215,7 +212,7 @@ function Home() {
                   <span className="text-primary font-semibold">$4.00</span>
                 </div>
                 <Link 
-                  to="/product/sourdough-01" 
+                  to="/product/2" 
                   className="bg-primary text-white text-center w-full p-2.5 rounded-[20px] border border-solid border-primary text-[12px] font-semibold uppercase tracking-[1px] cursor-pointer transition duration-300 hover:bg-white hover:text-primary">
                  View Selection
                 </Link>
@@ -237,7 +234,7 @@ function Home() {
                   <span className="text-primary font-semibold">$8.00</span>
                 </div>
                 <Link 
-                  to="/product/sourdough-01" 
+                  to="/product/3" 
                   className="bg-primary text-white text-center w-full p-2.5 rounded-[20px] border border-solid border-primary text-[12px] font-semibold uppercase tracking-[1px] cursor-pointer transition duration-300 hover:bg-white hover:text-primary">
                  View Selection
                 </Link>
@@ -259,7 +256,7 @@ function Home() {
                   <span className="text-primary font-semibold">$24.00</span>
                 </div>
                 <Link 
-                  to="/product/sourdough-01" 
+                  to="/product/4" 
                   className="bg-primary text-white text-center w-full p-2.5 rounded-[20px] border border-solid border-primary text-[12px] font-semibold uppercase tracking-[1px] cursor-pointer transition duration-300 hover:bg-white hover:text-primary">
                  View Selection
                 </Link>
