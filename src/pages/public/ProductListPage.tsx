@@ -7,7 +7,7 @@ import { faStar, faSearch, faFilter, faTimes } from "@fortawesome/free-solid-svg
 interface Product {
   id: number;
   name: string;
-  price: number;
+  price: number; // Lưu ý: Đảm bảo giá trị trả về từ API (database) cũng đã đồng bộ theo đơn vị Đồng
   description: string;
   collection: string;
   averageRating: number;
@@ -35,12 +35,13 @@ const COLLECTIONS = [
   "Seasonal Collection",
 ];
 
+// 1. Đổi khoảng giá sang đơn vị Đồng (VND)
 const PRICE_RANGES = [
-  { label: "Tất cả", min: 0, max: 999999 },
-  { label: "Dưới $20", min: 0, max: 20 },
-  { label: "$20 - $40", min: 20, max: 40 },
-  { label: "$40 - $60", min: 40, max: 60 },
-  { label: "Trên $60", min: 60, max: 999999 },
+  { label: "Tất cả", min: 0, max: 999999999 },
+  { label: "Dưới 50.000đ", min: 0, max: 50000 },
+  { label: "50.000đ - 100.000đ", min: 50000, max: 100000 },
+  { label: "100.000đ - 200.000đ", min: 100000, max: 200000 },
+  { label: "Trên 200.000đ", min: 200000, max: 999999999 },
 ];
 
 // ==================== PRODUCT CARD ====================
@@ -88,8 +89,9 @@ function ProductCard({ product }: { product: Product }) {
 
         {/* Giá + Nút */}
         <div className="flex items-center justify-between mt-auto">
-          <span className="text-primary font-bold text-[20px]">
-            ${product.price.toFixed(2)}
+          {/* 2. Định dạng lại cách hiển thị tiền tệ Việt Nam (Thêm dấu chấm phân cách hàng nghìn) */}
+          <span className="text-primary font-bold text-[18px]">
+            {product.price.toLocaleString("vi-VN")}đ
           </span>
           <span className="bg-primary text-white text-[12px] font-semibold uppercase tracking-wider px-4 py-2 rounded-full group-hover:bg-opacity-90 transition-all">
             Xem chi tiết
@@ -127,7 +129,9 @@ function ProductListPage() {
     params.append("size", PAGE_SIZE.toString());
     if (search) params.append("search", search);
     if (selectedCollection !== "Tất cả") params.append("collection", selectedCollection);
-    if (selectedPriceRange.max !== 999999 || selectedPriceRange.min !== 0) {
+    
+    // Kiểm tra theo khoảng max mới (999999999)
+    if (selectedPriceRange.max !== 999999999 || selectedPriceRange.min !== 0) {
       params.append("minPrice", selectedPriceRange.min.toString());
       params.append("maxPrice", selectedPriceRange.max.toString());
     }
@@ -167,7 +171,7 @@ function ProductListPage() {
     setCurrentPage(0);
   };
 
-  const hasActiveFilters = search || selectedCollection !== "Tất cả" || selectedPriceRange.min !== 0 || selectedPriceRange.max !== 999999;
+  const hasActiveFilters = search || selectedCollection !== "Tất cả" || selectedPriceRange.min !== 0 || selectedPriceRange.max !== 999999999;
 
   return (
     <main className="mt-24 mb-20 bg-bg-main min-h-screen">

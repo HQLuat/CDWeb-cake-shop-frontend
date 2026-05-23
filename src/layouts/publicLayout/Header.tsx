@@ -40,7 +40,7 @@ function Header() {
               <Link to="/order">order</Link>
             </li>
             <li className="hover:text-primary transition-colors">
-              <Link to="/blog">blog</Link>
+              <Link to="/products">menu</Link>
             </li>
           </ul>
         </nav>
