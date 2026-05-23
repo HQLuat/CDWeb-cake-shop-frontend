@@ -141,124 +141,148 @@ function Home() {
               </span>
               <h2 className="font-lora text-[36px]">Featured Delicacies</h2>
             </div>
-           <Link to="/products" className="text-primary text-[14px] font-medium underline underline-offset-4">
-            View All Menu →
-          </Link>
+            <Link to="/products" className="text-primary text-[14px] font-medium underline underline-offset-4">
+              View All Menu →
+            </Link>
           </div>
           {/* Product grid */}
           <div className="grid grid-cols-[repeat(3,1fr)] gap-6.25">
+            {/* 1. The Signature Sourdough */}
             <div className="col-span-2 flex-row bg-bg-surface rounded-[15px] overflow-hidden flex">
               <div className="w-[40%] p-10 flex flex-col justify-center grow bg-bg-main">
-                <div className="mb-2.5 flex justify-between">
+                <div className="mb-2.5 flex justify-between items-start gap-2">
                   <h3 className="font-lora text-[18px] font-semibold">
                     The Signature
                     <br />
                     Sourdough
                   </h3>
-                  <span className="text-primary font-semibold">$12</span>
+                  <span className="text-primary font-bold text-[16px] whitespace-nowrap">
+                    {(140000).toLocaleString("vi-VN")}đ
+                  </span>
                 </div>
                 <p className="mb-5 text-[13px] text-text-light grow">
                   72-hour fermentation process using our heritage starter,
                   yielding a complex tang and perfectly charred crust.
                 </p>
-                 <Link 
+                <Link 
                   to="/product/1" 
-                  className="bg-primary text-white text-center w-full p-2.5 rounded-[20px] border border-solid border-primary text-[12px] font-semibold uppercase tracking-[1px] cursor-pointer transition duration-300 hover:bg-white hover:text-primary">
-                 View Selection
+                  className="bg-primary text-white text-center w-full p-2.5 rounded-[20px] border border-solid border-primary text-[12px] font-semibold uppercase tracking-[1px] cursor-pointer transition duration-300 hover:bg-white hover:text-primary"
+                >
+                  View Selection
                 </Link>
               </div>
               <div className="w-[60%] h-full bg-white">
-                <img src={bake1} alt="Sourdough" className="w-full h-100" />
+                <img src={bake1} alt="Sourdough" className="w-full h-100 object-cover" />
               </div>
             </div>
+
+            {/* 2. Strawberry Macaron */}
             <div className="bg-bg-surface rounded-[15px] overflow-hidden flex flex-col">
               <div className="h-50 bg-white">
                 <img
                   src={bake2}
                   alt="Bake 2"
-                  className="transform-[translateY(-30%)] z-0"
+                  className="w-full h-full object-cover"
                 />
               </div>
               <div className="p-5 flex flex-col grow bg-bg-main z-1">
-                <div className="flex justify-between mb-2.5">
+                <div className="flex justify-between items-start gap-2 mb-2.5">
                   <h3 className="font-lora text-[18px] font-semibold">
                     Strawberry Macaron
                   </h3>
-                  <span className="text-primary font-semibold">$6.50</span>
+                  <span className="text-primary font-bold text-[16px] whitespace-nowrap">
+                    {(75000).toLocaleString("vi-VN")}đ
+                  </span>
                 </div>
                 <p className="text-[13px] text-text-light mb-5 grow">
                   Twice-baked with premium almond frangipane.
                 </p>
-                 <Link 
+                <Link 
                   to="/product/sourdough-01" 
-                  className="bg-primary text-white text-center w-full p-2.5 rounded-[20px] border border-solid border-primary text-[12px] font-semibold uppercase tracking-[1px] cursor-pointer transition duration-300 hover:bg-white hover:text-primary">
-                 View Selection
+                  className="bg-primary text-white text-center w-full p-2.5 rounded-[20px] border border-solid border-primary text-[12px] font-semibold uppercase tracking-[1px] cursor-pointer transition duration-300 hover:bg-white hover:text-primary"
+                >
+                  View Selection
                 </Link>
               </div>
             </div>
+
+            {/* 3. Chocolate Fudge Cheesecake */}
             <div className="bg-bg-surface rounded-[15px] overflow-hidden flex flex-col">
               <div className="h-50 bg-white">
                 <img
                   src={chocolateFudgeTruffleCheesecake}
                   alt="Chocolate Fudge Truffle Cheesecake"
-                  className="transform-[translateY(-10%)] z-0"
+                  className="w-full h-full object-cover"
                 />
               </div>
-              <div className="px-5 py-10 flex flex-col grow bg-bg-main z-1">
-                <div className="flex justify-between mb-10">
+              <div className="px-5 py-6 flex flex-col grow bg-bg-main z-1">
+                <div className="flex justify-between items-start gap-2 mb-6">
                   <h3 className="font-lora text-[18px] font-semibold">
                     Chocolate Fudge Cheesecake
                   </h3>
-                  <span className="text-primary font-semibold">$4.00</span>
+                  <span className="text-primary font-bold text-[16px] whitespace-nowrap">
+                    {(450000).toLocaleString("vi-VN")}đ
+                  </span>
                 </div>
                 <Link 
                   to="/product/2" 
-                  className="bg-primary text-white text-center w-full p-2.5 rounded-[20px] border border-solid border-primary text-[12px] font-semibold uppercase tracking-[1px] cursor-pointer transition duration-300 hover:bg-white hover:text-primary">
-                 View Selection
+                  className="bg-primary text-white text-center w-full p-2.5 rounded-[20px] border border-solid border-primary text-[12px] font-semibold uppercase tracking-[1px] cursor-pointer transition duration-300 hover:bg-white hover:text-primary mt-auto"
+                >
+                  View Selection
                 </Link>
               </div>
             </div>
+
+            {/* 4. Valentine Cupcakes */}
             <div className="bg-bg-surface rounded-[15px] overflow-hidden flex flex-col">
               <div className="h-50 bg-white">
                 <img
                   src={simpleValentineDayCupcakesRecipeCelebrateLoveDeliciously}
                   alt="Simple Valentine Day Cupcakes Recipe Celebrate Love Deliciously"
-                  className="transform-[translateY(-20%)] z-0"
+                  className="w-full h-full object-cover"
                 />
               </div>
-              <div className="py-10 px-5 flex flex-col grow bg-bg-main z-1">
-                <div className="flex justify-between mb-10">
+              <div className="py-6 px-5 flex flex-col grow bg-bg-main z-1">
+                <div className="flex justify-between items-start gap-2 mb-6">
                   <h3 className="font-lora text-[18px] font-semibold">
                     Valentine Cupcakes
                   </h3>
-                  <span className="text-primary font-semibold">$8.00</span>
+                  <span className="text-primary font-bold text-[16px] whitespace-nowrap">
+                    {(90000).toLocaleString("vi-VN")}đ
+                  </span>
                 </div>
                 <Link 
                   to="/product/3" 
-                  className="bg-primary text-white text-center w-full p-2.5 rounded-[20px] border border-solid border-primary text-[12px] font-semibold uppercase tracking-[1px] cursor-pointer transition duration-300 hover:bg-white hover:text-primary">
-                 View Selection
+                  className="bg-primary text-white text-center w-full p-2.5 rounded-[20px] border border-solid border-primary text-[12px] font-semibold uppercase tracking-[1px] cursor-pointer transition duration-300 hover:bg-white hover:text-primary mt-auto"
+                >
+                  View Selection
                 </Link>
               </div>
             </div>
+
+            {/* 5. Vanilla Cupcakes */}
             <div className="bg-bg-surface rounded-[15px] overflow-hidden flex flex-col">
               <div className="h-50 bg-white">
                 <img
                   src={vanillaCupcakeswithSweetButtercreamFrosting}
                   alt="Vanilla Cupcakes with Sweet Butter cream Frosting"
-                  className="transform-[translateY(-20%)] z-0"
+                  className="w-full h-full object-cover"
                 />
               </div>
-              <div className="py-10 px-5 flex flex-col grow bg-bg-main z-1">
-                <div className="flex justify-between mb-10">
+              <div className="py-6 px-5 flex flex-col grow bg-bg-main z-1">
+                <div className="flex justify-between items-start gap-2 mb-6">
                   <h3 className="font-lora text-[18px] font-semibold">
                     Vanilla Cupcakes
                   </h3>
-                  <span className="text-primary font-semibold">$24.00</span>
+                  <span className="text-primary font-bold text-[16px] whitespace-nowrap">
+                    {(280000).toLocaleString("vi-VN")}đ
+                  </span>
                 </div>
                 <Link 
                   to="/product/4" 
-                  className="bg-primary text-white text-center w-full p-2.5 rounded-[20px] border border-solid border-primary text-[12px] font-semibold uppercase tracking-[1px] cursor-pointer transition duration-300 hover:bg-white hover:text-primary">
-                 View Selection
+                  className="bg-primary text-white text-center w-full p-2.5 rounded-[20px] border border-solid border-primary text-[12px] font-semibold uppercase tracking-[1px] cursor-pointer transition duration-300 hover:bg-white hover:text-primary mt-auto"
+                >
+                  View Selection
                 </Link>
               </div>
             </div>
@@ -266,56 +290,56 @@ function Home() {
         </div>
       </section>
 
-      {/*  ARTISAN PROCESS */}
-        <section className="py-20 bg-bg-main overflow-hidden">
-          <div className="max-w-300 mx-auto px-5">
-            <div className="flex flex-col md:flex-row items-center gap-15">
-              <div className="w-full md:w-1/2 relative">
-                <div className="grid grid-cols-2 gap-4">
-                  <img src={bake1} alt="Process 1" className="rounded-2xl mt-8 shadow-lg" />
-                  <img src={bake2} alt="Process 2" className="rounded-2xl shadow-lg" />
-                </div>
-                <div className="absolute -z-10 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-primary/5 rounded-full blur-3xl"></div>
+      {/* ARTISAN PROCESS */}
+      <section className="py-20 bg-bg-main overflow-hidden">
+        <div className="max-w-300 mx-auto px-5">
+          <div className="flex flex-col md:flex-row items-center gap-15">
+            <div className="w-full md:w-1/2 relative">
+              <div className="grid grid-cols-2 gap-4">
+                <img src={bake1} alt="Process 1" className="rounded-2xl mt-8 shadow-lg" />
+                <img src={bake2} alt="Process 2" className="rounded-2xl shadow-lg" />
               </div>
-              
-              <div className="w-full md:w-1/2">
-                <span className="text-primary font-medium uppercase tracking-[2px] text-[12px]">Our Secret</span>
-                <h2 className="font-lora text-[40px] leading-tight mt-4 mb-6">Meticulously Crafted <br/> From Grain to Crust</h2>
-                <p className="text-text-light text-[15px] mb-8 leading-relaxed">
-                  Chúng tôi không chỉ làm bánh, chúng tôi tạo ra những trải nghiệm. Mỗi mẻ bánh Red Velvet tại <strong>Velvet Muse</strong> đều tuân thủ quy trình ủ lạnh 24h để đạt được kết cấu nhung mịn hoàn hảo mà không tiệm bánh công nghiệp nào có được.
-                </p>
-                <ul className="space-y-4">
-                  {['100% Organic Ingredients', 'Traditional Slow-Fermentation', 'Hand-laminated Layers'].map((item, i) => (
-                    <li key={i} className="flex items-center gap-3 text-[14px] font-medium">
-                      <span className="w-5 h-5 rounded-full bg-primary/10 text-primary flex items-center justify-center text-[10px]">✔</span>
-                      {item}
-                    </li>
-                  ))}
-                </ul>
-              </div>
+              <div className="absolute -z-10 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-primary/5 rounded-full blur-3xl"></div>
+            </div>
+            
+            <div className="w-full md:w-1/2">
+              <span className="text-primary font-medium uppercase tracking-[2px] text-[12px]">Our Secret</span>
+              <h2 className="font-lora text-[40px] leading-tight mt-4 mb-6">Meticulously Crafted <br/> From Grain to Crust</h2>
+              <p className="text-text-light text-[15px] mb-8 leading-relaxed">
+                Chúng tôi không chỉ làm bánh, chúng tôi tạo ra những trải nghiệm. Mỗi mẻ bánh Red Velvet tại <strong>Velvet Muse</strong> đều tuân thủ quy trình ủ lạnh 24h để đạt được kết cấu nhung mịn hoàn hảo mà không tiệm bánh công nghiệp nào có được.
+              </p>
+              <ul className="space-y-4">
+                {['100% Organic Ingredients', 'Traditional Slow-Fermentation', 'Hand-laminated Layers'].map((item, i) => (
+                  <li key={i} className="flex items-center gap-3 text-[14px] font-medium">
+                    <span className="w-5 h-5 rounded-full bg-primary/10 text-primary flex items-center justify-center text-[10px]">✔</span>
+                    {item}
+                  </li>
+                ))}
+              </ul>
             </div>
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/*TESTIMONIALS */}
-        <section className="py-20 bg-white">
-          <div className="max-w-300 mx-auto px-5 text-center">
-            <h2 className="font-lora text-[32px] mb-12 text-primary text-center">Loved by Dessert Enthusiasts</h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {[
-                {name: "Sophia Chen", comment: "Bánh Red Velvet ở đây thực sự là cực phẩm! Lớp kem cheese không quá ngọt, mịn như lụa."},
-                {name: "James Wilson", comment: "Sourdough giòn tan bên ngoài nhưng dai mềm bên trong. Hương vị lên men rất sâu sắc."},
-                {name: "Elena Tran", comment: "Không gian tiệm thơ mộng và bánh thì luôn tươi mới mỗi sáng. Rất đáng trải nghiệm!"}
-              ].map((review, i) => (
-                <div key={i} className="p-8 rounded-2xl bg-bg-surface border border-gray-50 hover:shadow-xl transition-shadow">
-                  <div className="text-yellow-500 mb-4">★★★★★</div>
-                  <p className="italic text-text-light text-[14px] mb-6">"{review.comment}"</p>
-                  <div className="font-semibold text-primary">— {review.name}</div>
-                </div>
-              ))}
-            </div>
+      {/* TESTIMONIALS */}
+      <section className="py-20 bg-white">
+        <div className="max-w-300 mx-auto px-5 text-center">
+          <h2 className="font-lora text-[32px] mb-12 text-primary text-center">Loved by Dessert Enthusiasts</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {[
+              {name: "Sophia Chen", comment: "Bánh Red Velvet ở đây thực sự là cực phẩm! Lớp kem cheese không quá ngọt, mịn như lụa."},
+              {name: "James Wilson", comment: "Sourdough giòn tan bên ngoài nhưng dai mềm bên trong. Hương vị lên men rất sâu sắc."},
+              {name: "Elena Tran", comment: "Không gian tiệm thơ mộng và bánh thì luôn tươi mới mỗi sáng. Rất đáng trải nghiệm!"}
+            ].map((review, i) => (
+              <div key={i} className="p-8 rounded-2xl bg-bg-surface border border-gray-50 hover:shadow-xl transition-shadow">
+                <div className="text-yellow-500 mb-4">★★★★★</div>
+                <p className="italic text-text-light text-[14px] mb-6">"{review.comment}"</p>
+                <div className="font-semibold text-primary">— {review.name}</div>
+              </div>
+            ))}
           </div>
-        </section>
+        </div>
+      </section>
 
       {/* Newsletter */}
       <section className="pb-25 bg-white">
