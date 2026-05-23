@@ -11,6 +11,7 @@ import LoginForm from "../features/auth/LoginForm";
 import RegisterForm from "../features/auth/RegisterForm";
 import ProductDetailPage from "../pages/public/ProductDetailPage";
 import ProductListPage from "../pages/public/ProductListPage";
+import CartPage from "../pages/public/CartPage";
 
 export const router = createBrowserRouter([
   // --- PUBLIC ROUTES ---
@@ -25,6 +26,10 @@ export const router = createBrowserRouter([
       {
         path: "/home",
         element: <HomePage />,
+      },
+      {
+        path: "/cart", 
+        element: <CartPage />,
       },
       {
         path: "/product/:id",
