@@ -1,17 +1,16 @@
 import { createBrowserRouter, Navigate } from "react-router-dom";
 import { AuthPage, HomePage } from "../pages/public";
-import { Dashboard } from "../pages/admin"; 
-import { Profile } from "../pages/user";
+import { Dashboard } from "../pages/admin";
+import { CartPage, Profile } from "../pages/user";
 import ProtectedRoute from "./ProtectedRoute";
 import PublicLayout from "../layouts/publicLayout";
-import AdminLayout from "../layouts/adminLayout/AdminLayout"; 
-import AdminProductManagement from "../pages/admin/AdminProduct"; 
-import AdminOrderManagement from "../pages/admin/AdminOrder";   
+import AdminLayout from "../layouts/adminLayout/AdminLayout";
+import AdminProductManagement from "../pages/admin/AdminProduct";
+import AdminOrderManagement from "../pages/admin/AdminOrder";
 import LoginForm from "../features/auth/LoginForm";
 import RegisterForm from "../features/auth/RegisterForm";
 import ProductDetailPage from "../pages/public/ProductDetailPage";
 import ProductListPage from "../pages/public/ProductListPage";
-import CartPage from "../pages/public/CartPage";
 
 export const router = createBrowserRouter([
   // --- PUBLIC ROUTES ---
@@ -28,7 +27,7 @@ export const router = createBrowserRouter([
         element: <HomePage />,
       },
       {
-        path: "/cart", 
+        path: "/cart",
         element: <CartPage />,
       },
       {
@@ -61,27 +60,27 @@ export const router = createBrowserRouter([
     children: [
       {
         path: "/admin",
-        element: <AdminLayout />, 
+        element: <AdminLayout />,
         children: [
           {
             index: true,
-            element: <Navigate to="/admin/analytics" replace />, 
+            element: <Navigate to="/admin/analytics" replace />,
           },
           {
             path: "analytics",
-            element: <Dashboard />, 
+            element: <Dashboard />,
           },
           {
             path: "products",
-            element: <AdminProductManagement />, 
+            element: <AdminProductManagement />,
           },
           {
             path: "orders",
-            element: <AdminOrderManagement />, 
+            element: <AdminOrderManagement />,
           },
         ],
       },
-      
+
       {
         path: "/profile",
         element: <Profile />,
