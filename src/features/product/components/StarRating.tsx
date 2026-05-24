@@ -2,7 +2,6 @@ import { faStar, faStarHalfAlt } from "@fortawesome/free-solid-svg-icons";
 import { faStar as StarEmpty } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-// ==================== STAR RATING ====================
 export default function StarRating({ rating }: { rating: number }) {
   const stars = [];
   const full = Math.floor(rating);

@@ -1,5 +1,10 @@
 import { createBrowserRouter, Navigate } from "react-router-dom";
-import { AuthPage, HomePage, ProductListPage } from "../pages/public";
+import {
+  AuthPage,
+  HomePage,
+  ProductListPage,
+  ProductDetailPage,
+} from "../pages/public";
 import { Dashboard } from "../pages/admin";
 import { CartPage, Profile } from "../pages/user";
 import ProtectedRoute from "./ProtectedRoute";
@@ -9,7 +14,6 @@ import AdminProductManagement from "../pages/admin/AdminProduct";
 import AdminOrderManagement from "../pages/admin/AdminOrder";
 import LoginForm from "../features/auth/LoginForm";
 import RegisterForm from "../features/auth/RegisterForm";
-import ProductDetailPage from "../pages/public/ProductDetailPage";
 
 export const router = createBrowserRouter([
   // --- PUBLIC ROUTES ---
