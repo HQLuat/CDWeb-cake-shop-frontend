@@ -1,7 +1,12 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faStar, faSearch, faFilter, faTimes } from "@fortawesome/free-solid-svg-icons";
+import {
+  faStar,
+  faSearch,
+  faFilter,
+  faTimes,
+} from "@fortawesome/free-solid-svg-icons";
 
 // ==================== TYPES ====================
 interface Product {
@@ -54,7 +59,10 @@ function ProductCard({ product }: { product: Product }) {
       {/* Ảnh */}
       <div className="h-56 overflow-hidden bg-bg-surface">
         <img
-          src={product.imageUrls?.[0] || "https://images.unsplash.com/photo-1586788224331-947f68671cf1?w=400"}
+          src={
+            product.imageUrls?.[0] ||
+            "https://images.unsplash.com/photo-1586788224331-947f68671cf1?w=400"
+          }
           alt={product.name}
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
         />
@@ -84,7 +92,9 @@ function ProductCard({ product }: { product: Product }) {
               <FontAwesomeIcon key={i} icon={faStar} />
             ))}
           </div>
-          <span className="text-text-light text-[12px]">({product.totalReviews})</span>
+          <span className="text-text-light text-[12px]">
+            ({product.totalReviews})
+          </span>
         </div>
 
         {/* Giá + Nút */}
@@ -128,8 +138,9 @@ function ProductListPage() {
     params.append("page", currentPage.toString());
     params.append("size", PAGE_SIZE.toString());
     if (search) params.append("search", search);
-    if (selectedCollection !== "Tất cả") params.append("collection", selectedCollection);
-    
+    if (selectedCollection !== "Tất cả")
+      params.append("collection", selectedCollection);
+
     // Kiểm tra theo khoảng max mới (999999999)
     if (selectedPriceRange.max !== 999999999 || selectedPriceRange.min !== 0) {
       params.append("minPrice", selectedPriceRange.min.toString());
@@ -137,7 +148,7 @@ function ProductListPage() {
     }
 
     fetch(`http://localhost:8080/api/products?${params.toString()}`)
-      .then(res => res.json())
+      .then((res) => res.json())
       .then((data: PageResponse) => {
         setProducts(data.content);
         setTotalElements(data.totalElements);
@@ -153,7 +164,7 @@ function ProductListPage() {
     setCurrentPage(0);
   };
 
-  const handlePriceChange = (range: typeof PRICE_RANGES[0]) => {
+  const handlePriceChange = (range: (typeof PRICE_RANGES)[0]) => {
     setSelectedPriceRange(range);
     setCurrentPage(0);
   };
@@ -171,29 +182,38 @@ function ProductListPage() {
     setCurrentPage(0);
   };
 
-  const hasActiveFilters = search || selectedCollection !== "Tất cả" || selectedPriceRange.min !== 0 || selectedPriceRange.max !== 999999999;
+  const hasActiveFilters =
+    search ||
+    selectedCollection !== "Tất cả" ||
+    selectedPriceRange.min !== 0 ||
+    selectedPriceRange.max !== 999999999;
 
   return (
     <main className="mt-24 mb-20 bg-bg-main min-h-screen">
       {/* Header */}
       <div className="bg-white border-b">
-        <div className="max-w-[1200px] mx-auto px-5 py-10">
-          <span className="text-primary text-[12px] uppercase tracking-[2px] font-medium">The Signature Collection</span>
-          <h1 className="font-lora text-[40px] mt-2 text-text-dark">Thực Đơn Của Chúng Tôi</h1>
+        <div className="max-w-300 mx-auto px-5 py-10">
+          <span className="text-primary text-[12px] uppercase tracking-[2px] font-medium">
+            The Signature Collection
+          </span>
+          <h1 className="font-lora text-[40px] mt-2 text-text-dark">
+            Thực Đơn Của Chúng Tôi
+          </h1>
           <p className="text-text-light mt-2 text-[14px]">
             Khám phá {totalElements} loại bánh thủ công tinh tế
           </p>
         </div>
       </div>
 
-      <div className="max-w-[1200px] mx-auto px-5 py-8">
+      <div className="max-w-300 mx-auto px-5 py-8">
         <div className="flex gap-8">
-
           {/* ===== SIDEBAR FILTER ===== */}
-          <aside className={`
-            w-64 flex-shrink-0
+          <aside
+            className={`
+            w-64 shrink-0
             ${showFilter ? "block" : "hidden"} md:block
-          `}>
+          `}
+          >
             <div className="bg-white rounded-2xl p-6 shadow-sm sticky top-28">
               {/* Header filter */}
               <div className="flex items-center justify-between mb-6">
@@ -215,7 +235,7 @@ function ProductListPage() {
                   Danh mục
                 </h4>
                 <div className="space-y-2">
-                  {COLLECTIONS.map(col => (
+                  {COLLECTIONS.map((col) => (
                     <button
                       key={col}
                       onClick={() => handleCollectionChange(col)}
@@ -237,7 +257,7 @@ function ProductListPage() {
                   Khoảng giá
                 </h4>
                 <div className="space-y-2">
-                  {PRICE_RANGES.map(range => (
+                  {PRICE_RANGES.map((range) => (
                     <button
                       key={range.label}
                       onClick={() => handlePriceChange(range)}
@@ -257,21 +277,29 @@ function ProductListPage() {
 
           {/* ===== MAIN CONTENT ===== */}
           <div className="flex-1">
-
             {/* Thanh tìm kiếm + nút filter mobile */}
             <div className="flex gap-3 mb-6">
               <div className="flex-1 flex items-center bg-white rounded-full px-4 py-3 shadow-sm border border-gray-100">
-                <FontAwesomeIcon icon={faSearch} className="text-text-light mr-3" />
+                <FontAwesomeIcon
+                  icon={faSearch}
+                  className="text-text-light mr-3"
+                />
                 <input
                   type="text"
                   placeholder="Tìm kiếm bánh..."
                   value={searchInput}
-                  onChange={e => setSearchInput(e.target.value)}
-                  onKeyDown={e => e.key === "Enter" && handleSearch()}
+                  onChange={(e) => setSearchInput(e.target.value)}
+                  onKeyDown={(e) => e.key === "Enter" && handleSearch()}
                   className="flex-1 outline-none text-[14px] text-text-dark bg-transparent"
                 />
                 {searchInput && (
-                  <button onClick={() => { setSearchInput(""); setSearch(""); }} className="text-text-light hover:text-primary ml-2">
+                  <button
+                    onClick={() => {
+                      setSearchInput("");
+                      setSearch("");
+                    }}
+                    className="text-text-light hover:text-primary ml-2"
+                  >
                     <FontAwesomeIcon icon={faTimes} size="xs" />
                   </button>
                 )}
@@ -294,8 +322,18 @@ function ProductListPage() {
             {/* Kết quả tìm kiếm info */}
             {hasActiveFilters && (
               <div className="mb-4 text-[13px] text-text-light">
-                Tìm thấy <span className="font-semibold text-text-dark">{totalElements}</span> sản phẩm
-                {search && <> cho "<span className="text-primary font-medium">{search}</span>"</>}
+                Tìm thấy{" "}
+                <span className="font-semibold text-text-dark">
+                  {totalElements}
+                </span>{" "}
+                sản phẩm
+                {search && (
+                  <>
+                    {" "}
+                    cho "
+                    <span className="text-primary font-medium">{search}</span>"
+                  </>
+                )}
               </div>
             )}
 
@@ -303,19 +341,27 @@ function ProductListPage() {
             {loading ? (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {[...Array(6)].map((_, i) => (
-                  <div key={i} className="bg-white rounded-2xl h-80 animate-pulse" />
+                  <div
+                    key={i}
+                    className="bg-white rounded-2xl h-80 animate-pulse"
+                  />
                 ))}
               </div>
             ) : products.length === 0 ? (
               <div className="text-center py-20">
-                <p className="text-text-light text-[16px]">Không tìm thấy sản phẩm nào.</p>
-                <button onClick={handleClearFilters} className="mt-4 text-primary underline text-[14px]">
+                <p className="text-text-light text-[16px]">
+                  Không tìm thấy sản phẩm nào.
+                </p>
+                <button
+                  onClick={handleClearFilters}
+                  className="mt-4 text-primary underline text-[14px]"
+                >
                   Xóa bộ lọc
                 </button>
               </div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {products.map(product => (
+                {products.map((product) => (
                   <ProductCard key={product.id} product={product} />
                 ))}
               </div>
@@ -325,7 +371,7 @@ function ProductListPage() {
             {totalPages > 1 && (
               <div className="flex justify-center gap-2 mt-10">
                 <button
-                  onClick={() => setCurrentPage(p => Math.max(0, p - 1))}
+                  onClick={() => setCurrentPage((p) => Math.max(0, p - 1))}
                   disabled={currentPage === 0}
                   className="px-4 py-2 rounded-full text-[13px] border border-gray-200 disabled:opacity-40 hover:border-primary hover:text-primary transition-all"
                 >
@@ -345,7 +391,9 @@ function ProductListPage() {
                   </button>
                 ))}
                 <button
-                  onClick={() => setCurrentPage(p => Math.min(totalPages - 1, p + 1))}
+                  onClick={() =>
+                    setCurrentPage((p) => Math.min(totalPages - 1, p + 1))
+                  }
                   disabled={currentPage === totalPages - 1}
                   className="px-4 py-2 rounded-full text-[13px] border border-gray-200 disabled:opacity-40 hover:border-primary hover:text-primary transition-all"
                 >

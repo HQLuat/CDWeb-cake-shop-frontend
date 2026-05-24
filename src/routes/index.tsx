@@ -27,10 +27,6 @@ export const router = createBrowserRouter([
         element: <HomePage />,
       },
       {
-        path: "/cart",
-        element: <CartPage />,
-      },
-      {
         path: "/product/:id",
         element: <ProductDetailPage />,
       },
@@ -58,6 +54,7 @@ export const router = createBrowserRouter([
   {
     element: <ProtectedRoute />,
     children: [
+      // ADMIN
       {
         path: "/admin",
         element: <AdminLayout />,
@@ -81,9 +78,19 @@ export const router = createBrowserRouter([
         ],
       },
 
+      // USER
       {
-        path: "/profile",
-        element: <Profile />,
+        element: <PublicLayout />,
+        children: [
+          {
+            path: "/cart",
+            element: <CartPage />,
+          },
+          {
+            path: "/profile",
+            element: <Profile />,
+          },
+        ],
       },
     ],
   },
