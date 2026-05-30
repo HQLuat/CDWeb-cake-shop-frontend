@@ -112,11 +112,11 @@ export default function ProductDetailContent({
           {/* Price */}
           <div className="mb-5 flex items-baseline gap-3">
             <span className="font-lora text-[34px] font-semibold text-primary">
-              {(product.price * quantity).toLocaleString("vi-VN")}đ
+              {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(product.price * quantity * 1000)}
             </span>
             {quantity > 1 && (
               <span className="text-gray-400 text-[14px]">
-                ({product.price.toLocaleString("vi-VN")}đ / cái)
+                ({new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(product.price * 1000)} / cái)
               </span>
             )}
           </div>

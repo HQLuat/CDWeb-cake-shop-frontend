@@ -1,22 +1,47 @@
+import { useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar, faCakeCandles } from "@fortawesome/free-solid-svg-icons";
-import {
-  yummy,
-  bake1,
-  bake2,
-  chocolateFudgeTruffleCheesecake,
-  simpleValentineDayCupcakesRecipeCelebrateLoveDeliciously,
-  vanillaCupcakeswithSweetButtercreamFrosting,
-} from "../../assets/homePage";
+import { yummy, bake1, bake2 } from "../../assets/homePage";
 import headerCream from "../../assets/homePage/header/theProminentOrganicDrippingCreamMaskTransitionMask.png";
 import { Link } from "react-router-dom";
 
+// Import các công cụ kết nối dữ liệu từ Redux Store hệ thống của bạn
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
+import { fetchProducts } from "../../features/product/productThunk";
+
 function Home() {
+  const dispatch = useAppDispatch();
+  
+  // Lấy danh sách sản phẩm thực tế từ Database thông qua Redux
+  const { productPage, isLoadingList } = useAppSelector((state) => state.product);
+  
+  // Lấy ra tối đa 5 sản phẩm đầu tiên có trong database để làm sản phẩm nổi bật
+  const featuredProducts = productPage?.content?.slice(0, 5) || [];
+
+  // Tự động gọi API lấy danh sách sản phẩm ngay khi tải trang chủ
+  useEffect(() => {
+    dispatch(
+      fetchProducts({
+        page: 0,
+        size: 5,
+      })
+    );
+  }, [dispatch]);
+
+  // Danh sách ảnh Unsplash chất lượng cao dùng làm ảnh bọc dự phòng (Fallback) phòng khi link database bị chặn
+  const backupImages = [
+    "https://i.pinimg.com/736x/79/0c/8b/790c8b07d5869dee8ceab42ea5ed8d8f.jpg", // Bánh 1
+    "https://i.pinimg.com/736x/16/46/3d/16463d7aa39c47d3f720ef0ec932c885.jpg", // Bánh 2
+    "https://i.pinimg.com/736x/30/9d/63/309d63c5fb68a856a69a0803ecd90068.jpg", // Bánh 3
+    "https://i.pinimg.com/736x/38/70/22/38702204789a6531c5ad8f8ba9c1c982.jpg", // Bánh 4
+    "https://i.pinimg.com/1200x/9b/98/c7/9b98c7ec8a35300f627cad7047c9563e.jpg", // Bánh 5
+  ];
+
   return (
     <main className="mt-20">
       {/* Banner */}
       <section className="relative pt-20 pb-30 bg-primary text-white overflow-visible">
-        <img src={headerCream} className="w-full h-70 absolute top-0 left-0" />
+        <img src={headerCream} className="w-full h-70 absolute top-0 left-0" alt="Cream Mask" />
         <div className="max-w-300 mx-auto px-5 relative flex items-center justify-between z-2">
           {/* Left part */}
           <div className="w-[40%]">
@@ -30,9 +55,9 @@ function Home() {
               Nâng tầm nghệ thuật làm bánh qua sự thuần khiết từ nguyên liệu hữu cơ và hương vị di sản. Hãy trải nghiệm kết cấu mềm mịn như nhung từ những bậc thầy thủ công thực thụ.
             </p>
             <div className="flex gap-3.75">
-              <button className="bg-white text-text-dark px-6 py-3 rounded-[30px] text-[13px] font-semibold uppercase tracking-[1px] cursor-pointer transition-all duration-300">
+              <Link to="/products" className="bg-white text-text-dark px-6 py-3 rounded-[30px] text-[13px] font-semibold uppercase tracking-[1px] cursor-pointer transition-all duration-300 hover:opacity-90">
                 Shop Now
-              </button>
+              </Link>
               <button className="bg-transparent text-white border border-solid border-white px-6 py-3 rounded-[30px] text-[13px] font-semibold uppercase tracking-[1px] cursor-pointer transition-all duration-300">
                 Our Story
               </button>
@@ -66,7 +91,6 @@ function Home() {
           </div>
           
           <div className="flex justify-center flex-wrap gap-8 md:gap-12">
-            {/* Category Item */}
             {[
               { name: "Cakes", icon: "🎂", count: "12 Items" },
               { name: "Sourdough", icon: "🥖", count: "8 Items" },
@@ -97,7 +121,6 @@ function Home() {
       {/* Features */}
       <section className="py-25">
         <div className="max-w-300 m-auto px-5 flex justify-between">
-          {/* Features title */}
           <div className="w-[30%]">
             <h2 className="font-lora text-[32px] text-primary mb-5">
               The Artisan
@@ -106,7 +129,6 @@ function Home() {
             </h2>
             <hr className="w-12.5 h-0.5 bg-primary border-none" />
           </div>
-          {/* Features list */}
           <div className="w-[60%] flex gap-10">
             <div>
               <FontAwesomeIcon icon={faStar} />
@@ -130,10 +152,9 @@ function Home() {
         </div>
       </section>
 
-      {/* Products */}
+     {/* Products Section */}
       <section className="pt-12.5 pb-25 bg-white">
         <div className="max-w-300 m-auto px-5">
-          {/* Section header */}
           <div className="mb-10 flex justify-between items-end">
             <div>
               <span className="mb-3.75 block text-primary text-[12px] uppercase tracking-[2px]">
@@ -145,147 +166,62 @@ function Home() {
               View All Menu →
             </Link>
           </div>
-          {/* Product grid */}
+
+          {/* Grid hiển thị danh sách sản phẩm thực tế */}
           <div className="grid grid-cols-[repeat(3,1fr)] gap-6.25">
-            {/* 1. The Signature Sourdough */}
-            <div className="col-span-2 flex-row bg-bg-surface rounded-[15px] overflow-hidden flex">
-              <div className="w-[40%] p-10 flex flex-col justify-center grow bg-bg-main">
-                <div className="mb-2.5 flex justify-between items-start gap-2">
-                  <h3 className="font-lora text-[18px] font-semibold">
-                    The Signature
-                    <br />
-                    Sourdough
-                  </h3>
-                  <span className="text-primary font-bold text-[16px] whitespace-nowrap">
-                    {(140000).toLocaleString("vi-VN")}đ
-                  </span>
-                </div>
-                <p className="mb-5 text-[13px] text-text-light grow">
-                  72-hour fermentation process using our heritage starter,
-                  yielding a complex tang and perfectly charred crust.
-                </p>
-                <Link 
-                  to="/product/1" 
-                  className="bg-primary text-white text-center w-full p-2.5 rounded-[20px] border border-solid border-primary text-[12px] font-semibold uppercase tracking-[1px] cursor-pointer transition duration-300 hover:bg-white hover:text-primary"
-                >
-                  View Selection
-                </Link>
-              </div>
-              <div className="w-[60%] h-full bg-white">
-                <img src={bake1} alt="Sourdough" className="w-full h-100 object-cover" />
-              </div>
-            </div>
+            {isLoadingList ? (
+              <p className="col-span-3 text-center text-gray-400 py-10">Đang tải danh sách sản phẩm nổi bật...</p>
+            ) : featuredProducts.length === 0 ? (
+              <p className="col-span-3 text-center text-gray-400 py-10">Không có dữ liệu sản phẩm trong hệ thống.</p>
+            ) : (
+              featuredProducts.map((product, index) => {
+                const isFirst = index === 0;
+                
+                // Fallback xử lý ảnh Pinterest bị chặn
+                const currentImg = product.imageUrls?.[0]?.includes("pinimg.com") 
+                  ? (backupImages[index] || backupImages[0])
+                  : (product.imageUrls?.[0] || backupImages[0]);
 
-            {/* 2. Strawberry Macaron */}
-            <div className="bg-bg-surface rounded-[15px] overflow-hidden flex flex-col">
-              <div className="h-50 bg-white">
-                <img
-                  src={bake2}
-                  alt="Bake 2"
-                  className="w-full h-full object-cover"
-                />
-              </div>
-              <div className="p-5 flex flex-col grow bg-bg-main z-1">
-                <div className="flex justify-between items-start gap-2 mb-2.5">
-                  <h3 className="font-lora text-[18px] font-semibold">
-                    Strawberry Macaron
-                  </h3>
-                  <span className="text-primary font-bold text-[16px] whitespace-nowrap">
-                    {(75000).toLocaleString("vi-VN")}đ
-                  </span>
-                </div>
-                <p className="text-[13px] text-text-light mb-5 grow">
-                  Twice-baked with premium almond frangipane.
-                </p>
-                <Link 
-                  to="/product/sourdough-01" 
-                  className="bg-primary text-white text-center w-full p-2.5 rounded-[20px] border border-solid border-primary text-[12px] font-semibold uppercase tracking-[1px] cursor-pointer transition duration-300 hover:bg-white hover:text-primary"
-                >
-                  View Selection
-                </Link>
-              </div>
-            </div>
+                return (
+                  <div
+                    key={product.id}
+                    className={`${
+                      isFirst ? "col-span-2 flex-row" : "flex-col"
+                    } bg-bg-surface rounded-[15px] overflow-hidden flex`}
+                  >
+                    {/* KHỐI ẢNH: Đã đảo lên trước và thêm lớp xử lý thứ tự (order) */}
+                    <div className={`${isFirst ? "w-[60%] h-full order-2" : "h-50 order-1"} bg-white overflow-hidden`}>
+                      <img 
+                        src={currentImg} 
+                        alt={product.name} 
+                        className="w-full h-full object-cover hover:scale-105 transition-transform duration-500" 
+                      />
+                    </div>
 
-            {/* 3. Chocolate Fudge Cheesecake */}
-            <div className="bg-bg-surface rounded-[15px] overflow-hidden flex flex-col">
-              <div className="h-50 bg-white">
-                <img
-                  src={chocolateFudgeTruffleCheesecake}
-                  alt="Chocolate Fudge Truffle Cheesecake"
-                  className="w-full h-full object-cover"
-                />
-              </div>
-              <div className="px-5 py-6 flex flex-col grow bg-bg-main z-1">
-                <div className="flex justify-between items-start gap-2 mb-6">
-                  <h3 className="font-lora text-[18px] font-semibold">
-                    Chocolate Fudge Cheesecake
-                  </h3>
-                  <span className="text-primary font-bold text-[16px] whitespace-nowrap">
-                    {(450000).toLocaleString("vi-VN")}đ
-                  </span>
-                </div>
-                <Link 
-                  to="/product/2" 
-                  className="bg-primary text-white text-center w-full p-2.5 rounded-[20px] border border-solid border-primary text-[12px] font-semibold uppercase tracking-[1px] cursor-pointer transition duration-300 hover:bg-white hover:text-primary mt-auto"
-                >
-                  View Selection
-                </Link>
-              </div>
-            </div>
-
-            {/* 4. Valentine Cupcakes */}
-            <div className="bg-bg-surface rounded-[15px] overflow-hidden flex flex-col">
-              <div className="h-50 bg-white">
-                <img
-                  src={simpleValentineDayCupcakesRecipeCelebrateLoveDeliciously}
-                  alt="Simple Valentine Day Cupcakes Recipe Celebrate Love Deliciously"
-                  className="w-full h-full object-cover"
-                />
-              </div>
-              <div className="py-6 px-5 flex flex-col grow bg-bg-main z-1">
-                <div className="flex justify-between items-start gap-2 mb-6">
-                  <h3 className="font-lora text-[18px] font-semibold">
-                    Valentine Cupcakes
-                  </h3>
-                  <span className="text-primary font-bold text-[16px] whitespace-nowrap">
-                    {(90000).toLocaleString("vi-VN")}đ
-                  </span>
-                </div>
-                <Link 
-                  to="/product/3" 
-                  className="bg-primary text-white text-center w-full p-2.5 rounded-[20px] border border-solid border-primary text-[12px] font-semibold uppercase tracking-[1px] cursor-pointer transition duration-300 hover:bg-white hover:text-primary mt-auto"
-                >
-                  View Selection
-                </Link>
-              </div>
-            </div>
-
-            {/* 5. Vanilla Cupcakes */}
-            <div className="bg-bg-surface rounded-[15px] overflow-hidden flex flex-col">
-              <div className="h-50 bg-white">
-                <img
-                  src={vanillaCupcakeswithSweetButtercreamFrosting}
-                  alt="Vanilla Cupcakes with Sweet Butter cream Frosting"
-                  className="w-full h-full object-cover"
-                />
-              </div>
-              <div className="py-6 px-5 flex flex-col grow bg-bg-main z-1">
-                <div className="flex justify-between items-start gap-2 mb-6">
-                  <h3 className="font-lora text-[18px] font-semibold">
-                    Vanilla Cupcakes
-                  </h3>
-                  <span className="text-primary font-bold text-[16px] whitespace-nowrap">
-                    {(280000).toLocaleString("vi-VN")}đ
-                  </span>
-                </div>
-                <Link 
-                  to="/product/4" 
-                  className="bg-primary text-white text-center w-full p-2.5 rounded-[20px] border border-solid border-primary text-[12px] font-semibold uppercase tracking-[1px] cursor-pointer transition duration-300 hover:bg-white hover:text-primary mt-auto"
-                >
-                  View Selection
-                </Link>
-              </div>
-            </div>
+                    {/* KHỐI CHỮ: Nằm sau ảnh (ở dưới đối với flex-col, bên trái đối với flex-row nhờ order-1) */}
+                    <div className={`${isFirst ? "w-[40%] p-10 order-1" : "p-5 order-2"} flex flex-col justify-center grow bg-bg-main z-1`}>
+                      <div className="mb-2.5 flex justify-between items-start gap-2">
+                        <h3 className="font-lora text-[18px] font-semibold line-clamp-2">
+                          {product.name}
+                        </h3>
+                        <span className="text-primary font-bold text-[16px] whitespace-nowrap">
+                          {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(product.price * 1000)}
+                        </span>
+                      </div>
+                      <p className="mb-5 text-[13px] text-text-light grow line-clamp-2">
+                        {product.description}
+                      </p>
+                      <Link 
+                        to={`/product/${product.id}`} 
+                        className="bg-primary text-white text-center w-full p-2.5 rounded-[20px] border border-solid border-primary text-[12px] font-semibold uppercase tracking-[1px] cursor-pointer transition duration-300 hover:bg-white hover:text-primary mt-auto"
+                      >
+                        View Selection
+                      </Link>
+                    </div>
+                  </div>
+                );
+              })
+            )}
           </div>
         </div>
       </section>
@@ -306,7 +242,7 @@ function Home() {
               <span className="text-primary font-medium uppercase tracking-[2px] text-[12px]">Our Secret</span>
               <h2 className="font-lora text-[40px] leading-tight mt-4 mb-6">Meticulously Crafted <br/> From Grain to Crust</h2>
               <p className="text-text-light text-[15px] mb-8 leading-relaxed">
-                Chúng tôi không chỉ làm bánh, chúng tôi tạo ra những trải nghiệm. Mỗi mẻ bánh Red Velvet tại <strong>Velvet Muse</strong> đều tuân thủ quy trình ủ lạnh 24h để đạt được kết cấu nhung mịn hoàn hảo mà không tiệm bánh công nghiệp nào có được.
+                Chúng tôi không chỉ làm bánh, chúng tôi tạo ra những trải nghiệm. Mỗi mẻ bánh tại <strong>Velvet Muse</strong> đều tuân thủ quy trình nghiêm ngặt để đạt được kết cấu tuyệt vời nhất.
               </p>
               <ul className="space-y-4">
                 {['100% Organic Ingredients', 'Traditional Slow-Fermentation', 'Hand-laminated Layers'].map((item, i) => (
