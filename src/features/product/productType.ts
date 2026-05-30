@@ -9,6 +9,7 @@ export interface ReviewDTO {
 
 // ==================== PRODUCT ====================
 export interface ProductSummary {
+  [x: string]: number;
   id: number;
   name: string;
   price: number;
@@ -89,4 +90,24 @@ export interface ProductState {
   isSubmittingReview: boolean;
   submitReviewError: string | null;
   submitReviewSuccess: boolean;
+
+   // Promotions
+  promoProducts: PromotionProduct[];
+  isLoadingPromos: boolean;
+  promosError: string | null;
+}
+
+// ==================== PROMOTION ====================
+export interface PromotionProduct {
+  id: number;
+  name: string;
+  description: string;
+  collection: string;
+  price: number;
+  currentPrice: number;
+  averageRating: number;
+  totalReviews: number;
+  imageUrls: string[];
+  discountPercent: number | null;
+  discountedPrice: number | null;
 }

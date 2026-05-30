@@ -1,5 +1,6 @@
 import { Link, useLocation, Outlet, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faChartBar, faBox, faClipboardList, faSignOutAlt, faUsers, faTag, faHome } from "@fortawesome/free-solid-svg-icons";
 import {
   faChartBar,
   faBox,
@@ -19,6 +20,7 @@ function AdminLayout() {
     { path: "/admin/products", label: "Quản lý sản phẩm", icon: faBox },
     { path: "/admin/orders", label: "Quản lý đơn hàng", icon: faClipboardList },
     { path: "/admin/users", label: "Quản lý người dùng", icon: faUsers },
+    { path: "/admin/promotions", label: "Quản lý khuyến mãi", icon: faTag },
   ];
 
   const handleLogout = () => {
@@ -55,13 +57,19 @@ function AdminLayout() {
           </nav>
         </div>
 
-        <button
-          onClick={handleLogout}
-          className="flex items-center gap-3.5 px-4 py-3 text-red-500 hover:bg-red-50 rounded-xl text-sm font-semibold transition-all"
-        >
-          <FontAwesomeIcon icon={faSignOutAlt} className="w-5" />
-          Đăng xuất
-        </button>
+        <div className="flex flex-col gap-2">
+          <Link
+            to="/"
+            className="flex items-center gap-3.5 px-4 py-3 text-gray-500 hover:bg-gray-50 hover:text-gray-900 rounded-xl text-sm font-semibold transition-all"
+          >
+            <FontAwesomeIcon icon={faHome} className="w-5" />
+            Trang chủ
+          </Link>
+          <button className="flex items-center gap-3.5 px-4 py-3 text-red-500 hover:bg-red-50 rounded-xl text-sm font-semibold transition-all">
+            <FontAwesomeIcon icon={faSignOutAlt} className="w-5" />
+            Đăng xuất
+          </button>
+        </div>
       </aside>
 
       <main className="flex-1 overflow-y-auto">

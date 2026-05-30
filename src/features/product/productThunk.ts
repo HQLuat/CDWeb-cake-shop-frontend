@@ -9,6 +9,7 @@ import type {
   FetchProductsRequest,
   FetchReviewsRequest,
   CreateReviewRequest,
+  PromotionProduct,
 } from "./productType";
 
 // --- FETCH PRODUCT LIST ---
@@ -93,10 +94,7 @@ export const submitReview = createAsyncThunk<
     try {
       const res = await axiosClient.post<ReviewDTO>(
         `/products/${productId}/reviews`,
-        {
-          rating,
-          comment,
-        },
+        { rating, comment },
       );
       return res.data;
     } catch (error: unknown) {
@@ -108,3 +106,23 @@ export const submitReview = createAsyncThunk<
     }
   },
 );
+
+// --- FETCH PROMO PRODUCTS ---
+export const fetchPromoProducts = createAsyncThunk<
+  PromotionProduct[],
+  void,
+  { rejectValue: string }
+>("product/fetchPromoProducts", async (_, { rejectWithValue }) => {
+  try {
+    const res = await axiosClient.get<PromotionProduct[]>("/products/promotions");
+    return res.data.filter(
+      (p) => p.discountPercent != null && p.discountPercent > 0,
+    );
+  } catch (error: unknown) {
+    if (axios.isAxiosError(error) && error.response)
+      return rejectWithValue(
+        error.response.data?.message || "Không thể tải khuyến mãi.",
+      );
+    return rejectWithValue("Lỗi kết nối máy chủ!");
+  }
+});
