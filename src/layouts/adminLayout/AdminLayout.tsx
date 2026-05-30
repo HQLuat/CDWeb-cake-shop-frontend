@@ -1,11 +1,13 @@
 import { Link, useLocation, Outlet, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faChartBar, faBox, faClipboardList, faSignOutAlt, faUsers, faTag, faHome } from "@fortawesome/free-solid-svg-icons";
 import {
   faChartBar,
   faBox,
   faClipboardList,
   faSignOutAlt,
+  faUsers,
+  faTag,
+  faHome,
 } from "@fortawesome/free-solid-svg-icons";
 import { useAppDispatch } from "../../app/hooks";
 import { logout } from "../../features/auth/authSlice";
@@ -44,11 +46,10 @@ function AdminLayout() {
               <Link
                 key={item.path}
                 to={item.path}
-                className={`w-full flex items-center gap-3.5 px-4 py-3 rounded-xl text-sm font-semibold transition-all ${
-                  location.pathname === item.path
-                    ? "bg-primary text-white shadow-md shadow-primary/10"
-                    : "text-gray-500 hover:bg-gray-50 hover:text-gray-900"
-                }`}
+                className={`w-full flex items-center gap-3.5 px-4 py-3 rounded-xl text-sm font-semibold transition-all ${location.pathname === item.path
+                  ? "bg-primary text-white shadow-md shadow-primary/10"
+                  : "text-gray-500 hover:bg-gray-50 hover:text-gray-900"
+                  }`}
               >
                 <FontAwesomeIcon icon={item.icon} className="w-5 text-center" />
                 {item.label}
@@ -65,7 +66,10 @@ function AdminLayout() {
             <FontAwesomeIcon icon={faHome} className="w-5" />
             Trang chủ
           </Link>
-          <button className="flex items-center gap-3.5 px-4 py-3 text-red-500 hover:bg-red-50 rounded-xl text-sm font-semibold transition-all">
+          <button
+            onClick={handleLogout}
+            className="flex items-center gap-3.5 px-4 py-3 text-red-500 hover:bg-red-50 rounded-xl text-sm font-semibold transition-all"
+          >
             <FontAwesomeIcon icon={faSignOutAlt} className="w-5" />
             Đăng xuất
           </button>
