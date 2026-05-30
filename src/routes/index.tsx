@@ -13,6 +13,7 @@ import AdminLayout from "../layouts/adminLayout/AdminLayout";
 import AdminProductManagement from "../pages/admin/AdminProduct";
 import LoginForm from "../features/auth/LoginForm";
 import RegisterForm from "../features/auth/RegisterForm";
+import AdminUserManagement from "../pages/admin/AdminUserManagement";
 
 export const router = createBrowserRouter([
   // --- PUBLIC ROUTES ---
@@ -76,6 +77,10 @@ export const router = createBrowserRouter([
           {
             path: "orders",
             element: <AdminOrderPage />,
+          },
+          {
+            path: "users",
+            element: <AdminUserManagement />,
           },
         ],
       },

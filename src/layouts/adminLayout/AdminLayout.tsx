@@ -1,7 +1,7 @@
 import React from "react";
 import { Link, useLocation, Outlet } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faChartBar, faBox, faClipboardList, faSignOutAlt } from "@fortawesome/free-solid-svg-icons";
+import { faChartBar, faBox, faClipboardList, faSignOutAlt, faUsers } from "@fortawesome/free-solid-svg-icons";
 
 function AdminLayout() {
   const location = useLocation(); 
@@ -10,6 +10,7 @@ function AdminLayout() {
     { path: "/admin/analytics", label: "Thống kê", icon: faChartBar },
     { path: "/admin/products", label: "Quản lý sản phẩm", icon: faBox },
     { path: "/admin/orders", label: "Quản lý đơn hàng", icon: faClipboardList },
+    { path: "/admin/users", label: "Quản lý người dùng", icon: faUsers },
   ];
 
   return (
