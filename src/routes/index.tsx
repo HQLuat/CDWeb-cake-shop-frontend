@@ -5,13 +5,12 @@ import {
   ProductListPage,
   ProductDetailPage,
 } from "../pages/public";
-import { Dashboard } from "../pages/admin";
+import { Dashboard, AdminOrderPage } from "../pages/admin";
 import { CartPage, Profile } from "../pages/user";
 import ProtectedRoute from "./ProtectedRoute";
 import PublicLayout from "../layouts/publicLayout";
 import AdminLayout from "../layouts/adminLayout/AdminLayout";
 import AdminProductManagement from "../pages/admin/AdminProduct";
-import AdminOrderManagement from "../pages/admin/AdminOrder";
 import LoginForm from "../features/auth/LoginForm";
 import RegisterForm from "../features/auth/RegisterForm";
 
@@ -76,7 +75,7 @@ export const router = createBrowserRouter([
           },
           {
             path: "orders",
-            element: <AdminOrderManagement />,
+            element: <AdminOrderPage />,
           },
         ],
       },
