@@ -308,9 +308,13 @@ export default function CartFeature() {
                 </span>
               </div>
 
-              <button className="w-full bg-primary hover:bg-opacity-90 text-white text-sm font-bold py-3.5 rounded-xl shadow-md shadow-primary/10 transition-all mt-2 tracking-wide uppercase">
+              <Link
+                to="/checkout"
+                state={{ discount, shippingFee }}
+                className="w-full bg-primary hover:bg-opacity-90 text-white text-sm font-bold py-3.5 rounded-xl shadow-md shadow-primary/10 transition-all mt-2 tracking-wide uppercase block text-center"
+              >
                 Tiến Hành Đặt Hàng
-              </button>
+              </Link>
             </div>
           </div>
         </div>
