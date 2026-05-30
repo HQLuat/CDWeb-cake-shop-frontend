@@ -8,29 +8,37 @@ import type {
 } from "./orderType";
 
 // ==================== RESPONSE SHAPE ====================
-interface PagedOrderResponse {
-  content: OrderDTO[];
-  totalElements: number;
-  totalPages: number;
-  number: number; // current page (0-indexed)
-  size: number;
+interface OrderApiResponse {
+  success: boolean;
+  message: string;
+  data: OrderDTO[];
+  meta: {
+    page: number;          // 1-indexed
+    size: number;
+    totalPages: number;
+    totalElements: number;
+    timestamp: string;
+    version: string;
+  };
 }
 
 // ==================== FETCH ADMIN ORDERS ====================
 export const fetchAdminOrders = createAsyncThunk<
-  PagedOrderResponse,
+  OrderApiResponse,
   FetchOrdersRequest,
   { rejectValue: string }
 >("order/fetchAdminOrders", async (params, { rejectWithValue }) => {
   try {
     const query = new URLSearchParams();
-    if (params.page !== undefined) query.append("page", params.page.toString());
+    query.append("page", (params.page ?? 1).toString()); // 1-indexed
     if (params.size !== undefined) query.append("size", params.size.toString());
-    if (params.status && params.status !== "ALL")
-      query.append("status", params.status);
-    if (params.search) query.append("search", params.search);
+    if (params.orderStatus && params.orderStatus !== "ALL")
+      query.append("orderStatus", params.orderStatus);  // đổi từ status
+    if (params.paymentStatus)
+      query.append("paymentStatus", params.paymentStatus); // thêm mới
+    if (params.keyword) query.append("keyword", params.keyword); // đổi từ search
 
-    const res = await axiosClient.get<PagedOrderResponse>(
+    const res = await axiosClient.get<OrderApiResponse>(
       `/orders/admin?${query.toString()}`,
     );
     return res.data;

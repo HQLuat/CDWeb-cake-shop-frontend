@@ -49,7 +49,8 @@ function LoginForm() {
     const response = await dispatch(loginUser({ ...formData })).unwrap();
 
     if (response.success) {
-      navigate("/");
+      const role = response.data?.role;
+      navigate(role === "ADMIN" ? "/admin/analytics" : "/home");
     }
   };
 

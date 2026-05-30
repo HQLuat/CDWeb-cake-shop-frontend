@@ -5,8 +5,7 @@ import { clearOrderError } from "./orderSlice";
 import type { OrderStatus, OrderDTO } from "./orderType";
 import { PAGE_SIZE } from "./orderConstants";
 
-import OrderStatusTabs from "./components/OrderStatusTabs";
-import OrderSearchBar from "./components/OrderSearchBar";
+import OrderFilterBar from "./components/OrderFilterBar";
 import OrderErrorBanner from "./components/OrderErrorBanner";
 import OrderTable from "./components/OrderTable";
 import OrderPagination from "./components/OrderPagination";
@@ -29,7 +28,7 @@ function AdminOrderFeature() {
   const [filterStatus, setFilterStatus] = useState<OrderStatus | "ALL">("ALL");
   const [searchInput, setSearchInput] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
-  const [page, setPage] = useState(0);
+  const [page, setPage] = useState(1); // 1-indexed
   const [selectedOrder, setSelectedOrder] = useState<OrderDTO | null>(null);
 
   // ── Fetch ────────────────────────────────────────────────────
@@ -38,8 +37,8 @@ function AdminOrderFeature() {
       fetchAdminOrders({
         page,
         size: PAGE_SIZE,
-        status: filterStatus,
-        search: searchQuery || undefined,
+        orderStatus: filterStatus,
+        keyword: searchQuery || undefined,
       }),
     );
   }, [dispatch, page, filterStatus, searchQuery]);
@@ -51,12 +50,12 @@ function AdminOrderFeature() {
   // ── Handlers ─────────────────────────────────────────────────
   const handleSearch = () => {
     setSearchQuery(searchInput);
-    setPage(0);
+    setPage(1);
   };
 
-  const handleFilterStatus = (val: OrderStatus | "ALL") => {
+  const handleFilterChange = (val: OrderStatus | "ALL") => {
     setFilterStatus(val);
-    setPage(0);
+    setPage(1);
   };
 
   const handleUpdateStatus = (id: number, newStatus: OrderStatus) => {
@@ -66,32 +65,30 @@ function AdminOrderFeature() {
   // ── Render ───────────────────────────────────────────────────
   return (
     <div className="p-6 bg-gray-50 min-h-screen">
-      {/* Page header */}
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold text-gray-800 font-lora">
-          Quản Lý Đơn Hàng
-        </h1>
-        <p className="text-sm text-gray-500 mt-0.5">
-          {isLoading
-            ? "Đang tải..."
-            : `Tổng cộng ${totalElements.toLocaleString()} đơn hàng`}
-        </p>
+      {/* ── Header – identical structure to AdminProduct ── */}
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-800 font-lora">
+            Quản Lý Đơn Hàng
+          </h1>
+          <p className="text-sm text-gray-500">
+            {isLoading
+              ? "Đang tải..."
+              : `Tổng cộng ${totalElements.toLocaleString("vi-VN")} đơn hàng`}
+          </p>
+        </div>
       </div>
 
-      {/* Status filter tabs */}
-      <OrderStatusTabs
-        activeStatus={filterStatus}
-        onChange={handleFilterStatus}
-      />
-
-      {/* Search bar */}
-      <OrderSearchBar
-        value={searchInput}
-        onChange={setSearchInput}
+      {/* ── Combined filter bar – matches AdminProduct filter card ── */}
+      <OrderFilterBar
+        searchValue={searchInput}
+        onSearchChange={setSearchInput}
         onSearch={handleSearch}
+        filterStatus={filterStatus}
+        onFilterChange={handleFilterChange}
       />
 
-      {/* Error banners */}
+      {/* ── Error banners ── */}
       <OrderErrorBanner
         error={error}
         updateError={updateError}
@@ -99,7 +96,7 @@ function AdminOrderFeature() {
         onDismiss={() => dispatch(clearOrderError())}
       />
 
-      {/* Order table */}
+      {/* ── Order table ── */}
       <OrderTable
         orders={orders}
         isLoading={isLoading}
@@ -108,14 +105,14 @@ function AdminOrderFeature() {
         onUpdateStatus={handleUpdateStatus}
       />
 
-      {/* Pagination */}
+      {/* ── Pagination ── */}
       <OrderPagination
         currentPage={currentPage}
         totalPages={totalPages}
         onPageChange={setPage}
       />
 
-      {/* Detail modal */}
+      {/* ── Detail modal ── */}
       {selectedOrder && (
         <OrderDetailModal
           order={selectedOrder}

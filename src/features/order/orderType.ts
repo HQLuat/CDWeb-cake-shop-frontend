@@ -16,7 +16,7 @@ export type OrderStatus =
   | "COMPLETED"
   | "CANCELLED";
 
-export type PaymentStatus = string; // tuỳ backend
+export type PaymentStatus = "UNPAID" | "PAID" | "REFUNDED" | "FAILED";
 
 export interface OrderDTO {
   id: number;
@@ -47,10 +47,11 @@ export interface OrderState {
 
 // ==================== REQUESTS ====================
 export interface FetchOrdersRequest {
-  page?: number;
+  page?: number;                         // 1-indexed
   size?: number;
-  status?: OrderStatus | "ALL";
-  search?: string;
+  orderStatus?: OrderStatus | "ALL";     // đổi từ status -> orderStatus
+  paymentStatus?: PaymentStatus;         // thêm mới
+  keyword?: string;                      // đổi từ search -> keyword
 }
 
 export interface UpdateOrderStatusRequest {
