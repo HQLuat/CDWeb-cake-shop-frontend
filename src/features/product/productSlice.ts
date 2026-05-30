@@ -5,6 +5,7 @@ import {
   fetchProductDetail,
   fetchReviews,
   submitReview,
+  fetchPromoProducts,
 } from "./productThunk";
 
 const initialState: ProductState = {
@@ -27,6 +28,11 @@ const initialState: ProductState = {
   isSubmittingReview: false,
   submitReviewError: null,
   submitReviewSuccess: false,
+
+  // Promotions
+  promoProducts: [],
+  isLoadingPromos: false,
+  promosError: null,
 };
 
 const productSlice = createSlice({
@@ -107,6 +113,20 @@ const productSlice = createSlice({
       .addCase(submitReview.rejected, (state, action) => {
         state.isSubmittingReview = false;
         state.submitReviewError = action.payload ?? "Đã xảy ra lỗi.";
+      })
+
+      // --- FETCH PROMO PRODUCTS ---
+      .addCase(fetchPromoProducts.pending, (state) => {
+        state.isLoadingPromos = true;
+        state.promosError = null;
+      })
+      .addCase(fetchPromoProducts.fulfilled, (state, action) => {
+        state.isLoadingPromos = false;
+        state.promoProducts = action.payload;
+      })
+      .addCase(fetchPromoProducts.rejected, (state, action) => {
+        state.isLoadingPromos = false;
+        state.promosError = action.payload ?? "Đã xảy ra lỗi.";
       });
   },
 });

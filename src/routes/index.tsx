@@ -14,6 +14,7 @@ import AdminProductManagement from "../pages/admin/AdminProduct";
 import LoginForm from "../features/auth/LoginForm";
 import RegisterForm from "../features/auth/RegisterForm";
 import AdminUserManagement from "../pages/admin/AdminUserManagement";
+import AdminPromotion from "../pages/admin/AdminPromotion";
 
 export const router = createBrowserRouter([
   // --- PUBLIC ROUTES ---
@@ -81,6 +82,10 @@ export const router = createBrowserRouter([
           {
             path: "users",
             element: <AdminUserManagement />,
+          },
+          {
+            path: "promotions",
+            element: <AdminPromotion />,
           },
         ],
       },
