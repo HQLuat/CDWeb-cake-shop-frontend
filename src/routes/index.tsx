@@ -6,7 +6,13 @@ import {
   ProductDetailPage,
 } from "../pages/public";
 import { Dashboard, AdminOrderPage } from "../pages/admin";
-import { CartPage, Profile } from "../pages/user";
+import {
+  CartPage,
+  Profile,
+  CheckoutPage,
+  MyOrdersPage,
+  PaymentResultPage,
+} from "../pages/user";
 import ProtectedRoute from "./ProtectedRoute";
 import AdminRoute from "./AdminRoute";
 import PublicLayout from "../layouts/publicLayout";
@@ -108,6 +114,18 @@ export const router = createBrowserRouter([
           {
             path: "/profile",
             element: <Profile />,
+          },
+          {
+            path: "/checkout",
+            element: <CheckoutPage />,
+          },
+          {
+            path: "/orders",
+            element: <MyOrdersPage />,
+          },
+          {
+            path: "/payment/result",
+            element: <PaymentResultPage />,
           },
         ],
       },

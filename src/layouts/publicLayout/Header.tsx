@@ -48,7 +48,7 @@ function Header() {
   const navItems = [
     { name: "trang chủ", path: "/home" },
     { name: "Về chúng tôi", path: "/about" },
-    { name: "đơn hàng", path: "/order" },
+    { name: "đơn hàng", path: "/orders" },
     { name: "sản phẩm", path: "/products" },
   ];
 
