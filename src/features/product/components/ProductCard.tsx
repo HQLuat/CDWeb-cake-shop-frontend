@@ -46,8 +46,8 @@ export default function ProductCard({ product }: { product: ProductSummary }) {
 
         {/* Price + CTA */}
         <div className="flex items-center justify-between mt-auto pt-3 border-t border-gray-50">
-          <span className="text-primary font-bold text-[18px] font-lora">
-            {product.price.toLocaleString("vi-VN")}đ
+          <span className="text-primary font-semibold">
+            {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(product.price * 1000)}
           </span>
           <span className="bg-primary text-white text-[11px] font-semibold uppercase tracking-wider px-4 py-2 rounded-full group-hover:bg-[#7a0001] transition-all shadow-sm shadow-primary/20">
             Xem chi tiết

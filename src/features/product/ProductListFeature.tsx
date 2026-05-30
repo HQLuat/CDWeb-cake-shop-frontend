@@ -45,19 +45,19 @@ export default function ProductListFeature() {
 
   const priceRange = PRICE_RANGES[selectedPriceIdx];
 
-  const load = useCallback(() => {
-    dispatch(
-      fetchProducts({
-        page: currentPage,
-        size: PAGE_SIZE,
-        search: search || undefined,
-        collection:
-          selectedCollection !== "Tất cả" ? selectedCollection : undefined,
-        minPrice: priceRange.min !== 0 ? priceRange.min : undefined,
-        maxPrice: priceRange.max,
-      }),
-    );
-  }, [dispatch, currentPage, search, selectedCollection, priceRange]);
+const load = useCallback(() => {
+  dispatch(
+    fetchProducts({
+      page: currentPage,
+      size: PAGE_SIZE,
+      search: search || undefined,
+      collection:
+        selectedCollection !== "Tất cả" ? selectedCollection : undefined,
+      minPrice: priceRange.min !== 0 ? (priceRange.min / 1000) : undefined,
+      maxPrice: priceRange.max ? (priceRange.max / 1000) : undefined,
+    }),
+  );
+}, [dispatch, currentPage, search, selectedCollection, priceRange]);
 
   useEffect(() => {
     load();
