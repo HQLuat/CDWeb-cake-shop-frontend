@@ -18,6 +18,7 @@ function AdminLayout() {
     { path: "/admin/analytics", label: "Thống kê", icon: faChartBar },
     { path: "/admin/products", label: "Quản lý sản phẩm", icon: faBox },
     { path: "/admin/orders", label: "Quản lý đơn hàng", icon: faClipboardList },
+    { path: "/admin/users", label: "Quản lý người dùng", icon: faUsers },
   ];
 
   const handleLogout = () => {
