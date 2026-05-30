@@ -9,7 +9,7 @@ const initialState: OrderState = {
   error: null,
   updateError: null,
   // Pagination
-  currentPage: 0,
+  currentPage: 1,
   totalPages: 0,
   totalElements: 0,
 };
@@ -32,10 +32,10 @@ const orderSlice = createSlice({
       })
       .addCase(fetchAdminOrders.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.orders = action.payload.content;
-        state.totalElements = action.payload.totalElements;
-        state.totalPages = action.payload.totalPages;
-        state.currentPage = action.payload.number;
+        state.orders = action.payload.data;
+        state.totalElements = action.payload.meta.totalElements;
+        state.totalPages = action.payload.meta.totalPages;
+        state.currentPage = action.payload.meta.page; // 1-indexed
       })
       .addCase(fetchAdminOrders.rejected, (state, action) => {
         state.isLoading = false;

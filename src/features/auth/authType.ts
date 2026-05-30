@@ -32,6 +32,7 @@ export interface GoogleAuthRequestDTO {
 export interface LoginResponseDTO {
   username: string;
   token: string;
+  role: "ADMIN" | "USER";
 }
 
 export interface AuthState {
