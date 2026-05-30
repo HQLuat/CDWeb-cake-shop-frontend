@@ -53,7 +53,7 @@ function OrderTable({
               <th className="py-4 px-6">Tổng tiền</th>
               <th className="py-4 px-6">Thanh toán</th>
               <th className="py-4 px-6">Trạng thái</th>
-              <th className="py-4 px-6 text-center">Xử lý nhanh</th>
+              <th className="py-4 px-6 text-center">Hành động</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-100 text-sm text-gray-700">

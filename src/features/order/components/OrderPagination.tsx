@@ -10,17 +10,17 @@ function getPaginationRange(
 ): (number | "...")[] {
   const delta = 2;
   const range: (number | "...")[] = [];
-  const left = Math.max(0, currentPage - delta);
-  const right = Math.min(totalPages - 1, currentPage + delta);
+  const left = Math.max(1, currentPage - delta);
+  const right = Math.min(totalPages, currentPage + delta);
 
-  if (left > 0) {
-    range.push(0);
-    if (left > 1) range.push("...");
+  if (left > 1) {
+    range.push(1);
+    if (left > 2) range.push("...");
   }
   for (let i = left; i <= right; i++) range.push(i);
-  if (right < totalPages - 1) {
-    if (right < totalPages - 2) range.push("...");
-    range.push(totalPages - 1);
+  if (right < totalPages) {
+    if (right < totalPages - 1) range.push("...");
+    range.push(totalPages);
   }
   return range;
 }
@@ -35,8 +35,8 @@ function OrderPagination({
   return (
     <div className="flex justify-center items-center gap-2 mt-6">
       <button
-        onClick={() => onPageChange(Math.max(0, currentPage - 1))}
-        disabled={currentPage === 0}
+        onClick={() => onPageChange(Math.max(1, currentPage - 1))}
+        disabled={currentPage === 1}
         className="px-4 py-2 rounded-full text-[13px] border border-gray-200 bg-white disabled:opacity-30 hover:border-primary hover:text-primary transition-all shadow-sm"
       >
         ← Trước
@@ -57,14 +57,14 @@ function OrderPagination({
                 : "bg-white border border-gray-200 hover:border-primary hover:text-primary"
             }`}
           >
-            {(item as number) + 1}
+            {item as number}
           </button>
         ),
       )}
 
       <button
-        onClick={() => onPageChange(Math.min(totalPages - 1, currentPage + 1))}
-        disabled={currentPage === totalPages - 1}
+        onClick={() => onPageChange(Math.min(totalPages, currentPage + 1))}
+        disabled={currentPage === totalPages}
         className="px-4 py-2 rounded-full text-[13px] border border-gray-200 bg-white disabled:opacity-30 hover:border-primary hover:text-primary transition-all shadow-sm"
       >
         Sau →

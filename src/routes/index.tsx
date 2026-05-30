@@ -8,6 +8,7 @@ import {
 import { Dashboard, AdminOrderPage } from "../pages/admin";
 import { CartPage, Profile } from "../pages/user";
 import ProtectedRoute from "./ProtectedRoute";
+import AdminRoute from "./AdminRoute";
 import PublicLayout from "../layouts/publicLayout";
 import AdminLayout from "../layouts/adminLayout/AdminLayout";
 import AdminProductManagement from "../pages/admin/AdminProduct";
@@ -16,7 +17,7 @@ import RegisterForm from "../features/auth/RegisterForm";
 import AdminUserManagement from "../pages/admin/AdminUserManagement";
 
 export const router = createBrowserRouter([
-  // --- PUBLIC ROUTES ---
+  // ─── PUBLIC ROUTES ──────────────────────────────────────────────
   {
     path: "/",
     element: <PublicLayout />,
@@ -39,6 +40,8 @@ export const router = createBrowserRouter([
       },
     ],
   },
+
+  // ─── AUTH ROUTES ────────────────────────────────────────────────
   {
     element: <AuthPage />,
     children: [
@@ -53,11 +56,10 @@ export const router = createBrowserRouter([
     ],
   },
 
-  // --- PRIVATE ROUTES ---
+  // ─── ADMIN ROUTES (role: ADMIN only) ────────────────────────────
   {
-    element: <ProtectedRoute />,
+    element: <AdminRoute />,
     children: [
-      // ADMIN
       {
         path: "/admin",
         element: <AdminLayout />,
@@ -84,8 +86,13 @@ export const router = createBrowserRouter([
           },
         ],
       },
+    ],
+  },
 
-      // USER
+  // ─── USER ROUTES (any authenticated user; guests → /login) ──────
+  {
+    element: <ProtectedRoute />,
+    children: [
       {
         element: <PublicLayout />,
         children: [
@@ -102,12 +109,13 @@ export const router = createBrowserRouter([
     ],
   },
 
+  // ─── REDIRECTS ──────────────────────────────────────────────────
   {
     path: "/dashboard",
     element: <Navigate to="/admin/analytics" replace />,
   },
 
-  // --- ERROR/404 ---
+  // ─── 404 ────────────────────────────────────────────────────────
   {
     path: "*",
     element: <Navigate to="/" replace />,

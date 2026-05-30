@@ -1,10 +1,18 @@
-import React from "react";
-import { Link, useLocation, Outlet } from "react-router-dom";
+import { Link, useLocation, Outlet, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faChartBar, faBox, faClipboardList, faSignOutAlt, faUsers } from "@fortawesome/free-solid-svg-icons";
+import {
+  faChartBar,
+  faBox,
+  faClipboardList,
+  faSignOutAlt,
+} from "@fortawesome/free-solid-svg-icons";
+import { useAppDispatch } from "../../app/hooks";
+import { logout } from "../../features/auth/authSlice";
 
 function AdminLayout() {
-  const location = useLocation(); 
+  const location = useLocation();
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const menuItems = [
     { path: "/admin/analytics", label: "Thống kê", icon: faChartBar },
@@ -13,19 +21,27 @@ function AdminLayout() {
     { path: "/admin/users", label: "Quản lý người dùng", icon: faUsers },
   ];
 
+  const handleLogout = () => {
+    dispatch(logout()); // clears token + role from localStorage & Redux
+    navigate("/login");
+  };
+
   return (
     <div className="flex min-h-screen bg-gray-50">
       <aside className="w-64 bg-white border-r border-gray-200 p-5 flex flex-col justify-between">
         <div>
           <div className="mb-8 px-2">
-            <h2 className="font-lora text-xl font-bold text-primary tracking-wide">Velvet Muse Admin</h2>
+            <h2 className="font-lora text-xl font-bold text-primary tracking-wide">
+              Velvet Muse Admin
+            </h2>
             <p className="text-xs text-gray-400 mt-1">Hệ thống quản trị tiệm bánh</p>
           </div>
+
           <nav className="space-y-1">
             {menuItems.map((item) => (
               <Link
                 key={item.path}
-                to={item.path} 
+                to={item.path}
                 className={`w-full flex items-center gap-3.5 px-4 py-3 rounded-xl text-sm font-semibold transition-all ${
                   location.pathname === item.path
                     ? "bg-primary text-white shadow-md shadow-primary/10"
@@ -39,7 +55,10 @@ function AdminLayout() {
           </nav>
         </div>
 
-        <button className="flex items-center gap-3.5 px-4 py-3 text-red-500 hover:bg-red-50 rounded-xl text-sm font-semibold transition-all">
+        <button
+          onClick={handleLogout}
+          className="flex items-center gap-3.5 px-4 py-3 text-red-500 hover:bg-red-50 rounded-xl text-sm font-semibold transition-all"
+        >
           <FontAwesomeIcon icon={faSignOutAlt} className="w-5" />
           Đăng xuất
         </button>
