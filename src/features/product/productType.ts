@@ -13,6 +13,8 @@ export interface ProductSummary {
   id: number;
   name: string;
   price: number;
+  currentPrice?: number;        
+  discountPercent?: number;  
   description: string;
   collection: string;
   averageRating: number;

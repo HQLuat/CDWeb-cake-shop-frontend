@@ -6,8 +6,7 @@ import headerCream from "../../assets/homePage/header/theProminentOrganicDrippin
 import { Link } from "react-router-dom";
 
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import { fetchProducts } from "../../features/product/productThunk";
-import { fetchPromoProducts } from "../../features/product/productThunk";
+import { fetchProducts, fetchPromoProducts } from "../../features/product/productThunk";
 
 function Home() {
   const dispatch = useAppDispatch();
@@ -30,12 +29,8 @@ function Home() {
     "https://i.pinimg.com/1200x/9b/98/c7/9b98c7ec8a35300f627cad7047c9563e.jpg",
   ];
 
-  const formatVND = (amount: number) => {
-    return new Intl.NumberFormat("vi-VN", {
-      style: "currency",
-      currency: "VND",
-    }).format(amount);
-  };
+  const formatVND = (amount: number) =>
+    new Intl.NumberFormat("vi-VN", { style: "currency", currency: "VND" }).format(amount);
 
   return (
     <main className="mt-20">
@@ -43,7 +38,6 @@ function Home() {
       <section className="relative pt-20 pb-30 bg-primary text-white overflow-visible">
         <img src={headerCream} className="w-full h-70 absolute top-0 left-0" alt="Cream Mask" />
         <div className="max-w-300 mx-auto px-5 relative flex items-center justify-between z-2">
-          {/* Left part */}
           <div className="w-[40%]">
             <span className="text-[12px] uppercase tracking-[2px] mb-3.75 block text-text-secondary">
               Boutique Patisserie
@@ -66,7 +60,6 @@ function Home() {
               </button>
             </div>
           </div>
-          {/* Right part */}
           <div className="w-[40%] relative">
             <img
               src={yummy}
@@ -82,6 +75,144 @@ function Home() {
           </div>
         </div>
       </section>
+
+      {/* Features */}
+      <section className="py-25">
+        <div className="max-w-300 m-auto px-5 flex justify-between">
+          <div className="w-[30%]">
+            <h2 className="font-lora text-[32px] text-primary mb-5">
+              The Artisan
+              <br />
+              Promise
+            </h2>
+            <hr className="w-12.5 h-0.5 bg-primary border-none" />
+          </div>
+          <div className="w-[60%] flex gap-10">
+            <div>
+              <FontAwesomeIcon icon={faStar} />
+              <h3 className="mt-3.75 mb-2.5 font-lora text-[20px]">Quality Ingredients</h3>
+              <p className="text-[14px] text-text-light">
+                Chúng tôi chỉ sử dụng bơ hữu cơ AOP từ Pháp và socola nguyên bản (single-origin) để tạo nên chiều sâu hương vị đặc trưng cho thương hiệu
+              </p>
+            </div>
+            <div>
+              <FontAwesomeIcon icon={faCakeCandles} />
+              <h3 className="mt-3.75 mb-2.5 font-lora text-[20px]">Fresh Daily Baking</h3>
+              <p className="text-[14px] text-text-light">
+                Lò nướng của chúng tôi chưa bao giờ nghỉ. Mỗi chiếc bánh sừng bò đều được cán tay thủ công và nướng chín vàng hoàn hảo ngay trước giờ mở cửa.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ===== PROMO SECTION ===== */}
+      {(isLoadingPromos || promoProducts.length > 0) && (
+        <section className="py-16 bg-white">
+          <div className="max-w-300 mx-auto px-5">
+            {/* Header */}
+            <div className="flex justify-between items-end mb-10">
+              <div>
+                <span className="flex items-center gap-2 text-red-500 text-[12px] uppercase tracking-[2px] font-semibold mb-2">
+                  <FontAwesomeIcon icon={faFire} className="animate-pulse" />
+                  Ưu Đãi Hôm Nay
+                </span>
+                <h2 className="font-lora text-[36px] text-gray-800">
+                  Flash Sale
+                  <span className="ml-3 text-red-500 text-[22px] font-bold">
+                    🔥
+                  </span>
+                </h2>
+                <p className="text-gray-400 text-[14px] mt-1">
+                  Giảm giá đặc biệt — số lượng có hạn, đặt ngay hôm nay!
+                </p>
+              </div>
+              <Link
+                to="/products"
+                className="flex items-center gap-2 text-red-500 text-[14px] font-semibold underline underline-offset-4 hover:text-red-700 transition-colors"
+              >
+                <FontAwesomeIcon icon={faTag} />
+                Xem tất cả →
+              </Link>
+            </div>
+
+            {/* Grid */}
+            {isLoadingPromos ? (
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-5">
+                {[...Array(4)].map((_, i) => (
+                  <div key={i} className="bg-white rounded-2xl overflow-hidden shadow-sm animate-pulse">
+                    <div className="h-48 bg-gray-100" />
+                    <div className="p-4 space-y-2">
+                      <div className="h-4 bg-gray-100 rounded w-3/4" />
+                      <div className="h-4 bg-gray-100 rounded w-1/2" />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-5">
+                {promoProducts.slice(0, 8).map((product) => {
+                  const originalPrice = product.price * 1000;
+                  const salePrice = product.currentPrice * 1000;
+                  const savings = originalPrice - salePrice;
+
+                  return (
+                    <Link
+                      key={product.id}
+                      to={`/product/${product.id}`}
+                      className="group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-red-50 hover:border-red-200"
+                    >
+                      {/* Image */}
+                      <div className="relative h-48 overflow-hidden bg-[#fff8f3]">
+                        <img
+                          src={product.imageUrls?.[0] || "https://images.unsplash.com/photo-1586788224331-947f68671cf1?w=400"}
+                          alt={product.name}
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                          onError={(e) => {
+                            (e.target as HTMLImageElement).src =
+                              "https://images.unsplash.com/photo-1586788224331-947f68671cf1?w=400";
+                          }}
+                        />
+                        {/* Discount badge */}
+                        <div className="absolute top-3 right-3 bg-red-500 text-white text-[11px] font-black px-2.5 py-1 rounded-full shadow-lg animate-pulse">
+                          -{product.discountPercent}%
+                        </div>
+                        {/* Collection badge */}
+                        <div className="absolute top-3 left-3 bg-white/90 backdrop-blur-sm text-primary text-[9px] uppercase tracking-widest font-semibold px-2 py-0.5 rounded-full shadow-sm">
+                          {product.collection}
+                        </div>
+                      </div>
+
+                      {/* Info */}
+                      <div className="p-4">
+                        <h3 className="font-lora text-[15px] font-semibold text-gray-800 mb-3 line-clamp-2 leading-snug group-hover:text-red-500 transition-colors">
+                          {product.name}
+                        </h3>
+
+                        {/* Price block */}
+                        <div className="flex items-end justify-between">
+                          <div>
+                            <p className="text-red-500 font-bold text-[17px] leading-none">
+                              {formatVND(salePrice)}
+                            </p>
+                            <p className="text-gray-400 text-[12px] line-through mt-0.5">
+                              {formatVND(originalPrice)}
+                            </p>
+                          </div>
+                          {/* Savings chip */}
+                          <span className="bg-red-50 text-red-500 text-[10px] font-bold px-2 py-0.5 rounded-full border border-red-100">
+                            -{formatVND(savings)}
+                          </span>
+                        </div>
+                      </div>
+                    </Link>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+        </section>
+      )}
 
       {/* Categories Section */}
       <section className="py-12 bg-bg-main">
@@ -113,123 +244,6 @@ function Home() {
                 </span>
               </div>
             ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ===== SẢN PHẨM KHUYẾN MÃI ===== */}
-      <section className="py-20 bg-[#fffdfb]">
-        <div className="max-w-300 mx-auto px-5">
-          <div className="mb-10 flex justify-between items-end border-b border-gray-100 pb-5">
-            <div>
-              <span className="mb-2.5 flex items-center gap-2 text-red-500 text-[12px] font-bold uppercase tracking-[2px]">
-                <FontAwesomeIcon icon={faFire} className="animate-bounce" /> Sweet Deals of the Week
-              </span>
-              <h2 className="font-lora text-[36px] text-gray-800">Ưu Đãi Ngọt Ngào</h2>
-            </div>
-            <div className="text-sm text-gray-400 font-medium">Số lượng có hạn trong ngày</div>
-          </div>
-
-          {isLoadingPromos ? (
-            <p className="text-center text-gray-400 py-10">Đang tải danh sách khuyến mãi...</p>
-          ) : promoProducts.length === 0 ? (
-            <p className="text-center text-gray-400 py-10">Hiện chưa có chương trình ưu đãi nào.</p>
-          ) : (
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-              {promoProducts.slice(0, 4).map((product, index) => {
-                // Dùng ảnh từ DB, fallback sang backup nếu không có
-                const currentImg =
-                  product.imageUrls?.[0] || backupImages[index] || backupImages[0];
-
-                // Giá lấy thẳng từ DB (đã được tính và lưu khi admin áp dụng)
-                const originalPrice = product.price * 1000;
-                const salePrice = product.currentPrice
-                  ? product.currentPrice * 1000
-                  : originalPrice * (1 - (product.discountPercent ?? 0) / 100);
-
-                return (
-                  <div
-                    key={`promo-${product.id}`}
-                    className="bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden group flex flex-col hover:shadow-xl transition-all duration-300 relative"
-                  >
-                    {/* Badge giảm giá */}
-                    <div className="absolute top-3 left-3 bg-red-500 text-white text-[11px] font-bold px-2.5 py-1 rounded-full z-10 flex items-center gap-1 shadow-md">
-                      <FontAwesomeIcon icon={faTag} size="xs" />
-                      GIẢM {product.discountPercent}%
-                    </div>
-
-                    {/* Ảnh sản phẩm */}
-                    <div className="h-48 overflow-hidden bg-gray-50 relative">
-                      <img
-                        src={currentImg}
-                        alt={product.name}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                      />
-                    </div>
-
-                    {/* Nội dung chữ */}
-                    <div className="p-5 flex flex-col flex-1 bg-white">
-                      <span className="text-[10px] text-primary uppercase font-bold tracking-wider mb-1 block">
-                        {product.collection || "Seasonal Special"}
-                      </span>
-                      <h3 className="font-lora font-semibold text-[16px] text-gray-800 line-clamp-1 mb-2 group-hover:text-primary transition-colors">
-                        {product.name}
-                      </h3>
-                      <p className="text-[12px] text-gray-400 line-clamp-2 mb-4 flex-1">
-                        {product.description}
-                      </p>
-
-                      {/* Giá tiền */}
-                      <div className="flex items-baseline gap-2 mb-4">
-                        <span className="text-red-500 font-bold text-[18px]">
-                          {formatVND(salePrice)}
-                        </span>
-                        <span className="text-gray-400 text-[13px] line-through">
-                          {formatVND(originalPrice)}
-                        </span>
-                      </div>
-
-                      <Link
-                        to={`/product/${product.id}`}
-                        className="border border-solid border-red-500 text-red-500 text-center py-2 rounded-xl text-[12px] font-bold uppercase tracking-[0.5px] transition-all duration-300 group-hover:bg-red-500 group-hover:text-white"
-                      >
-                        Săn Ngay
-                      </Link>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          )}
-        </div>
-      </section>
-
-      {/* Features */}
-      <section className="py-25">
-        <div className="max-w-300 m-auto px-5 flex justify-between">
-          <div className="w-[30%]">
-            <h2 className="font-lora text-[32px] text-primary mb-5">
-              The Artisan
-              <br />
-              Promise
-            </h2>
-            <hr className="w-12.5 h-0.5 bg-primary border-none" />
-          </div>
-          <div className="w-[60%] flex gap-10">
-            <div>
-              <FontAwesomeIcon icon={faStar} />
-              <h3 className="mt-3.75 mb-2.5 font-lora text-[20px]">Quality Ingredients</h3>
-              <p className="text-[14px] text-text-light">
-                Chúng tôi chỉ sử dụng bơ hữu cơ AOP từ Pháp và socola nguyên bản (single-origin) để tạo nên chiều sâu hương vị đặc trưng cho thương hiệu
-              </p>
-            </div>
-            <div>
-              <FontAwesomeIcon icon={faCakeCandles} />
-              <h3 className="mt-3.75 mb-2.5 font-lora text-[20px]">Fresh Daily Baking</h3>
-              <p className="text-[14px] text-text-light">
-                Lò nướng của chúng tôi chưa bao giờ nghỉ. Mỗi chiếc bánh sừng bò đều được cán tay thủ công và nướng chín vàng hoàn hảo ngay trước giờ mở cửa.
-              </p>
-            </div>
           </div>
         </div>
       </section>
@@ -266,15 +280,25 @@ function Home() {
                 const isFirst = index === 0;
                 const currentImg =
                   product.imageUrls?.[0] || backupImages[index] || backupImages[0];
+                const hasDiscount =
+                  product.discountPercent != null && product.discountPercent > 0;
+                const displayPrice = (product.currentPrice ?? product.price) * 1000;
 
                 return (
                   <div
                     key={product.id}
                     className={`${
                       isFirst ? "col-span-2 flex-row" : "flex-col"
-                    } bg-bg-surface rounded-[15px] overflow-hidden flex`}
+                    } bg-bg-surface rounded-[15px] overflow-hidden flex relative`}
                   >
-                    {/* Ảnh */}
+                    {/* Discount badge */}
+                    {hasDiscount && (
+                      <div className="absolute top-3 right-3 z-10 bg-red-500 text-white text-[10px] font-black px-2 py-0.5 rounded-full shadow">
+                        -{product.discountPercent}%
+                      </div>
+                    )}
+
+                    {/* Image */}
                     <div
                       className={`${
                         isFirst ? "w-[60%] h-full order-2" : "h-50 order-1"
@@ -287,7 +311,7 @@ function Home() {
                       />
                     </div>
 
-                    {/* Chữ */}
+                    {/* Text */}
                     <div
                       className={`${
                         isFirst ? "w-[40%] p-10 order-1" : "p-5 order-2"
@@ -297,9 +321,20 @@ function Home() {
                         <h3 className="font-lora text-[18px] font-semibold line-clamp-2">
                           {product.name}
                         </h3>
-                        <span className="text-primary font-bold text-[16px] whitespace-nowrap">
-                          {formatVND(product.price * 1000)}
-                        </span>
+                        <div className="flex flex-col items-end shrink-0">
+                          <span
+                            className={`font-bold text-[16px] whitespace-nowrap ${
+                              hasDiscount ? "text-red-500" : "text-primary"
+                            }`}
+                          >
+                            {formatVND(displayPrice)}
+                          </span>
+                          {hasDiscount && (
+                            <span className="text-gray-400 text-[12px] line-through">
+                              {formatVND(product.price * 1000)}
+                            </span>
+                          )}
+                        </div>
                       </div>
                       <p className="mb-5 text-[13px] text-text-light grow line-clamp-2">
                         {product.description}
@@ -342,18 +377,16 @@ function Home() {
                 <strong>Velvet Muse</strong> đều tuân thủ quy trình nghiêm ngặt để đạt được kết cấu tuyệt vời nhất.
               </p>
               <ul className="space-y-4">
-                {[
-                  "100% Organic Ingredients",
-                  "Traditional Slow-Fermentation",
-                  "Hand-laminated Layers",
-                ].map((item, i) => (
-                  <li key={i} className="flex items-center gap-3 text-[14px] font-medium">
-                    <span className="w-5 h-5 rounded-full bg-primary/10 text-primary flex items-center justify-center text-[10px]">
-                      ✔
-                    </span>
-                    {item}
-                  </li>
-                ))}
+                {["100% Organic Ingredients", "Traditional Slow-Fermentation", "Hand-laminated Layers"].map(
+                  (item, i) => (
+                    <li key={i} className="flex items-center gap-3 text-[14px] font-medium">
+                      <span className="w-5 h-5 rounded-full bg-primary/10 text-primary flex items-center justify-center text-[10px]">
+                        ✔
+                      </span>
+                      {item}
+                    </li>
+                  )
+                )}
               </ul>
             </div>
           </div>
@@ -368,23 +401,11 @@ function Home() {
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
-              {
-                name: "Sophia Chen",
-                comment: "Bánh Red Velvet ở đây thực sự là cực phẩm! Lớp kem cheese không quá ngọt, mịn như lụa.",
-              },
-              {
-                name: "James Wilson",
-                comment: "Sourdough giòn tan bên ngoài nhưng dai mềm bên trong. Hương vị lên men rất sâu sắc.",
-              },
-              {
-                name: "Elena Tran",
-                comment: "Không gian tiệm thơ mộng và bánh thì luôn tươi mới mỗi sáng. Rất đáng trải nghiệm!",
-              },
+              { name: "Sophia Chen", comment: "Bánh Red Velvet ở đây thực sự là cực phẩm! Lớp kem cheese không quá ngọt, mịn như lụa." },
+              { name: "James Wilson", comment: "Sourdough giòn tan bên ngoài nhưng dai mềm bên trong. Hương vị lên men rất sâu sắc." },
+              { name: "Elena Tran", comment: "Không gian tiệm thơ mộng và bánh thì luôn tươi mới mỗi sáng. Rất đáng trải nghiệm!" },
             ].map((review, i) => (
-              <div
-                key={i}
-                className="p-8 rounded-2xl bg-bg-surface border border-gray-50 hover:shadow-xl transition-shadow"
-              >
+              <div key={i} className="p-8 rounded-2xl bg-bg-surface border border-gray-50 hover:shadow-xl transition-shadow">
                 <div className="text-yellow-500 mb-4">★★★★★</div>
                 <p className="italic text-text-light text-[14px] mb-6">"{review.comment}"</p>
                 <div className="font-semibold text-primary">— {review.name}</div>
@@ -400,8 +421,7 @@ function Home() {
           <div className="bg-primary rounded-[20px] py-15 px-5 text-center text-white relative overflow-hidden before:content-[''] before:absolute before:-bottom-12.5 before:-left-12.5 before:w-50 before:h-50 before:bg-[rgba(255,255,255,0.05)] before:rounded-[50%] after:content-[''] after:absolute after:-top-12.5 after:-right-12.5 after:w-50 after:h-50 after:bg-[rgba(255,255,255,0.05)] after:rounded-[50%]">
             <h2 className="font-lora text-[36px] mb-3.75">Join the Velvet Muse</h2>
             <p className="text-[14px] opacity-[0.8] max-w-125 mx-auto mb-7.5">
-              Subscribe to receive exclusive seasonal menus, baking secrets from our chef, and
-              invitations to our monthly tasting events.
+              Subscribe to receive exclusive seasonal menus, baking secrets from our chef, and invitations to our monthly tasting events.
             </p>
             <form className="flex justify-center gap-2.5 max-w-100 mx-auto">
               <input
