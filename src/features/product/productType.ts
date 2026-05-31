@@ -9,7 +9,7 @@ export interface ReviewDTO {
 
 // ==================== PRODUCT ====================
 export interface ProductSummary {
-  [x: string]: number;
+  [x: string]: any;
   id: number;
   name: string;
   price: number;

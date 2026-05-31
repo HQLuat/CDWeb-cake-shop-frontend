@@ -38,11 +38,10 @@ function AdminLayout() {
               <Link
                 key={item.path}
                 to={item.path}
-                className={`w-full flex items-center gap-3.5 px-4 py-3 rounded-xl text-sm font-semibold transition-all ${
-                  location.pathname === item.path
-                    ? "bg-primary text-white shadow-md shadow-primary/10"
-                    : "text-gray-500 hover:bg-gray-50 hover:text-gray-900"
-                }`}
+                className={`w-full flex items-center gap-3.5 px-4 py-3 rounded-xl text-sm font-semibold transition-all ${location.pathname === item.path
+                  ? "bg-primary text-white shadow-md shadow-primary/10"
+                  : "text-gray-500 hover:bg-gray-50 hover:text-gray-900"
+                  }`}
               >
                 <FontAwesomeIcon icon={item.icon} className="w-5 text-center" />
                 {item.label}
