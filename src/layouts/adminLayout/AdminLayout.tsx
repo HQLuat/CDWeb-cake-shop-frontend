@@ -1,14 +1,6 @@
 import { Link, useLocation, Outlet, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faChartBar,
-  faBox,
-  faClipboardList,
-  faSignOutAlt,
-  faUsers,
-  faTag,
-  faHome,
-} from "@fortawesome/free-solid-svg-icons";
+import { faChartBar, faBox, faClipboardList, faSignOutAlt, faUsers, faTag, faHome } from "@fortawesome/free-solid-svg-icons";
 import { useAppDispatch } from "../../app/hooks";
 import { logout } from "../../features/auth/authSlice";
 
@@ -67,6 +59,7 @@ function AdminLayout() {
             Trang chủ
           </Link>
           <button
+            type="button"
             onClick={handleLogout}
             className="flex items-center gap-3.5 px-4 py-3 text-red-500 hover:bg-red-50 rounded-xl text-sm font-semibold transition-all"
           >

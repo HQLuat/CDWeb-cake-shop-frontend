@@ -110,15 +110,39 @@ export default function ProductDetailContent({
           </div>
 
           {/* Price */}
-          <div className="mb-5 flex items-baseline gap-3">
-            <span className="font-lora text-[34px] font-semibold text-primary">
-              {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(product.price * quantity * 1000)}
-            </span>
-            {quantity > 1 && (
-              <span className="text-gray-400 text-[14px]">
-                ({new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(product.price * 1000)} / cái)
-              </span>
-            )}
+          <div className="mb-5 flex items-baseline gap-3 flex-wrap">
+            {(() => {
+              const hasDiscount = product.discountPercent != null && product.discountPercent > 0;
+              const originalPrice = product.price * quantity * 1000;
+              const salePrice = hasDiscount && product.currentPrice
+                ? product.currentPrice * quantity * 1000
+                : originalPrice;
+              const formatVND = (n: number) =>
+                new Intl.NumberFormat("vi-VN", { style: "currency", currency: "VND" }).format(n);
+
+              return (
+                <>
+                  <span className={`font-lora text-[34px] font-semibold ${hasDiscount ? "text-red-500" : "text-primary"}`}>
+                    {formatVND(salePrice)}
+                  </span>
+                  {hasDiscount && (
+                    <span className="text-gray-400 text-[18px] line-through">
+                      {formatVND(originalPrice)}
+                    </span>
+                  )}
+                  {hasDiscount && (
+                    <span className="bg-red-100 text-red-500 text-[12px] font-bold px-2 py-0.5 rounded-full">
+                      -{product.discountPercent}%
+                    </span>
+                  )}
+                  {quantity > 1 && (
+                    <span className="text-gray-400 text-[14px]">
+                      ({formatVND(hasDiscount && product.currentPrice ? product.currentPrice * 1000 : product.price * 1000)} / cái)
+                    </span>
+                  )}
+                </>
+              );
+            })()}
           </div>
 
           {/* Description */}
