@@ -7,8 +7,8 @@ import {
 import { Link, useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import type { RegisterRequestDTO } from "./authType";
-import { registerUser, loginWithGoogle } from "./authThunk";
-import { GoogleLogin } from "@react-oauth/google";
+import { registerUser } from "./authThunk";
+import GoogleButton from "./GoogleButton";
 
 function RegisterForm() {
   // States
@@ -239,26 +239,7 @@ function RegisterForm() {
               <div className="flex-1 h-px bg-[#6f0001]/10"></div>
             </div>
             <div className="flex justify-center items-center gap-4">
-              <GoogleLogin
-                type="icon"
-                shape="circle"
-                theme="outline"
-                onSuccess={async (credentialResponse) => {
-                  const idToken = credentialResponse.credential;
-                  if (idToken) {
-                    const response = await dispatch(
-                      loginWithGoogle({ idToken })
-                    ).unwrap();
-                    if (response.success) {
-                      const role = response.data?.role;
-                      navigate(role === "ADMIN" ? "/admin/analytics" : "/home");
-                    }
-                  }
-                }}
-                onError={() => {
-                  setValidationError("Đăng ký qua Google thất bại.");
-                }}
-              />
+              <GoogleButton onError={() => setValidationError("Đăng ký qua Google thất bại.")} />
               <button className="w-10 h-10 flex items-center justify-center rounded-full bg-[#fbf2ea] text-[#5b403c] hover:bg-[#6f0001] hover:text-white transition-all shadow-sm cursor-pointer">
                 <FontAwesomeIcon icon={faFacebookF} />
               </button>
