@@ -189,7 +189,7 @@ export default function AdminPromotion() {
     new Intl.NumberFormat("vi-VN", {
       style: "currency",
       currency: "VND",
-    }).format(val * 1000);
+    }).format(val);
 
   // ==================== RENDER ====================
   return (

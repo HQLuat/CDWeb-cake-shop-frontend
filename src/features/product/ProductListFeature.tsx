@@ -53,8 +53,8 @@ const load = useCallback(() => {
       search: search || undefined,
       collection:
         selectedCollection !== "Tất cả" ? selectedCollection : undefined,
-      minPrice: priceRange.min !== 0 ? (priceRange.min / 1000) : undefined,
-      maxPrice: priceRange.max ? (priceRange.max / 1000) : undefined,
+      minPrice: priceRange.min !== 0 ? priceRange.min : undefined,
+      maxPrice: priceRange.max ? priceRange.max : undefined,
     }),
   );
 }, [dispatch, currentPage, search, selectedCollection, priceRange]);

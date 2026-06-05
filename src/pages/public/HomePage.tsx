@@ -152,8 +152,8 @@ function Home() {
             ) : (
               <div className="grid grid-cols-2 md:grid-cols-4 gap-5">
                 {promoProducts.slice(0, 8).map((product) => {
-                  const originalPrice = product.price * 1000;
-                  const salePrice = product.currentPrice * 1000;
+                  const originalPrice = product.price;
+                  const salePrice = product.currentPrice;
                   const savings = originalPrice - salePrice;
 
                   return (
@@ -282,7 +282,7 @@ function Home() {
                   product.imageUrls?.[0] || backupImages[index] || backupImages[0];
                 const hasDiscount =
                   product.discountPercent != null && product.discountPercent > 0;
-                const displayPrice = (product.currentPrice ?? product.price) * 1000;
+                const displayPrice = product.currentPrice ?? product.price;
 
                 return (
                   <div
@@ -331,7 +331,7 @@ function Home() {
                           </span>
                           {hasDiscount && (
                             <span className="text-gray-400 text-[12px] line-through">
-                              {formatVND(product.price * 1000)}
+                              {formatVND(product.price)}
                             </span>
                           )}
                         </div>

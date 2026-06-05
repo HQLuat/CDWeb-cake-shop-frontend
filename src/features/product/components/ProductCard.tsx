@@ -8,9 +8,9 @@ export default function ProductCard({ product }: { product: ProductSummary }) {
     new Intl.NumberFormat("vi-VN", { style: "currency", currency: "VND" }).format(amount);
 
   const hasDiscount = product.discountPercent != null && product.discountPercent > 0;
-  const originalPrice = product.price * 1000;
+  const originalPrice = product.price;
   const salePrice = hasDiscount && product.currentPrice
-    ? product.currentPrice * 1000
+    ? product.currentPrice
     : originalPrice;
 
   return (

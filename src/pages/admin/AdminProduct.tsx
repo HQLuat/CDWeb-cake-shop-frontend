@@ -1,12 +1,21 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faPlus, faSearch, faEdit, faTrashAlt, faFilter,
-  faTimes, faSpinner, faCheck, faImage, faChevronDown
+  faTimes, faSpinner, faCheck, faImage, faChevronDown,
+  faUpload, faArrowLeft, faArrowRight,
 } from "@fortawesome/free-solid-svg-icons";
 import axiosClient from "../../api/axiosClient";
 
 // ==================== TYPES ====================
+interface ImageEntry {
+  url: string;
+  publicId: string | null;
+  uploading?: boolean;   // đang upload
+  error?: string;        // lỗi upload
+  localPreview?: string; // blob URL tạm
+}
+
 interface ProductForm {
   name: string;
   price: string;
@@ -17,7 +26,7 @@ interface ProductForm {
   shippingInfo: string;
   ingredients: string;
   freshGuarantee: boolean;
-  imageUrls: string[];
+  images: ImageEntry[];
 }
 
 interface AdminProductItem {
@@ -36,6 +45,7 @@ interface AdminProductItem {
   averageRating: number;
   totalReviews: number;
   imageUrls: string[];
+  images?: { imageUrl: string; cloudinaryPublicId: string | null; sortOrder: number }[];
 }
 
 interface PageResponse {
@@ -56,11 +66,194 @@ const EMPTY_FORM: ProductForm = {
   name: "", price: "", description: "", detailDescription: "",
   storageGuide: "", collection: "Signature Collection",
   shippingInfo: "Giao hàng nhanh trong 2h tại nội thành",
-  ingredients: "", freshGuarantee: true, imageUrls: [""],
+  ingredients: "", freshGuarantee: true, images: [],
 };
 
 const fmtVND = (v: number) =>
-  new Intl.NumberFormat("vi-VN", { style: "currency", currency: "VND" }).format(v * 1000);
+  new Intl.NumberFormat("vi-VN", { style: "currency", currency: "VND" }).format(v);
+
+// ==================== IMAGE UPLOAD GRID ====================
+function ImageUploadGrid({
+  images,
+  onChange,
+}: {
+  images: ImageEntry[];
+  onChange: (images: ImageEntry[] | ((prev: ImageEntry[]) => ImageEntry[])) => void;
+}) {
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleFileSelect = async (files: FileList) => {
+    const remaining = 5 - images.length;
+    const selected = Array.from(files).slice(0, remaining);
+    if (selected.length === 0) return;
+
+    // Thêm placeholder "đang upload"
+    const placeholders: ImageEntry[] = selected.map((file) => ({
+      url: "",
+      publicId: null,
+      uploading: true,
+      localPreview: URL.createObjectURL(file),
+    }));
+    const startIndex = images.length;
+    onChange([...images, ...placeholders]);
+
+    // Upload từng file song song
+    const uploaded = await Promise.all(
+      selected.map(async (file, idx) => {
+        try {
+          const formData = new FormData();
+          formData.append("file", file);
+          const res = await axiosClient.post<{ url: string; publicId: string }>(
+            "/admin/products/upload-image",
+            formData,
+            { headers: { "Content-Type": "multipart/form-data" } }
+          );
+          return { url: res.data.url, publicId: res.data.publicId, uploading: false } as ImageEntry;
+        } catch {
+          return {
+            url: "",
+            publicId: null,
+            uploading: false,
+            error: "Upload thất bại",
+            localPreview: placeholders[idx].localPreview,
+          } as ImageEntry;
+        }
+      })
+    );
+
+    // Thay thế placeholder bằng kết quả thật
+    onChange((prev: ImageEntry[]) => {
+      const next = [...prev];
+      uploaded.forEach((entry, i) => {
+        next[startIndex + i] = entry;
+      });
+      return next;
+    });
+  };
+
+  const removeImage = (idx: number) => {
+    const next = [...images];
+    if (next[idx].localPreview) URL.revokeObjectURL(next[idx].localPreview!);
+    next.splice(idx, 1);
+    onChange(next);
+  };
+
+  const moveImage = (from: number, to: number) => {
+    if (to < 0 || to >= images.length) return;
+    const next = [...images];
+    [next[from], next[to]] = [next[to], next[from]];
+    onChange(next);
+  };
+
+  return (
+    <div>
+      <label className="block text-[11px] font-bold uppercase tracking-widest text-gray-400 mb-2">
+        <FontAwesomeIcon icon={faImage} className="mr-1.5" />
+        Ảnh sản phẩm
+        <span className="ml-2 font-normal normal-case text-gray-300">(tối đa 5 ảnh · ảnh đầu = ảnh chính)</span>
+      </label>
+
+      <div className="grid grid-cols-5 gap-2">
+        {images.map((img, i) => (
+          <div
+            key={i}
+            className={`relative aspect-square rounded-xl overflow-hidden border-2 transition-all ${
+              i === 0 ? "border-primary/60 ring-2 ring-primary/20" : "border-gray-200"
+            }`}
+          >
+            {/* Preview */}
+            {img.uploading ? (
+              <div className="w-full h-full flex items-center justify-center bg-gray-50">
+                <FontAwesomeIcon icon={faSpinner} className="animate-spin text-primary text-lg" />
+              </div>
+            ) : img.error ? (
+              <div className="w-full h-full flex flex-col items-center justify-center bg-red-50 p-1">
+                <span className="text-red-400 text-[10px] text-center">{img.error}</span>
+              </div>
+            ) : (
+              <img
+                src={img.url || img.localPreview}
+                alt={`Ảnh ${i + 1}`}
+                className="w-full h-full object-cover"
+              />
+            )}
+
+            {/* Badge ảnh chính */}
+            {i === 0 && !img.uploading && !img.error && (
+              <span className="absolute bottom-0 left-0 right-0 bg-primary/80 text-white text-[9px] font-bold text-center py-0.5">
+                Ảnh chính
+              </span>
+            )}
+
+            {/* Controls */}
+            {!img.uploading && (
+              <div className="absolute top-1 right-1 flex gap-1">
+                <button
+                  type="button"
+                  onClick={() => removeImage(i)}
+                  className="w-5 h-5 bg-red-500 text-white rounded-full flex items-center justify-center hover:bg-red-600 transition-colors"
+                >
+                  <FontAwesomeIcon icon={faTimes} style={{ fontSize: "8px" }} />
+                </button>
+              </div>
+            )}
+
+            {/* Move left / right */}
+            {!img.uploading && images.length > 1 && (
+              <div className="absolute bottom-5 left-0 right-0 flex justify-between px-0.5">
+                {i > 0 ? (
+                  <button
+                    type="button"
+                    onClick={() => moveImage(i, i - 1)}
+                    className="w-5 h-5 bg-black/40 text-white rounded-full flex items-center justify-center hover:bg-black/60 transition-colors"
+                  >
+                    <FontAwesomeIcon icon={faArrowLeft} style={{ fontSize: "8px" }} />
+                  </button>
+                ) : <span />}
+                {i < images.length - 1 ? (
+                  <button
+                    type="button"
+                    onClick={() => moveImage(i, i + 1)}
+                    className="w-5 h-5 bg-black/40 text-white rounded-full flex items-center justify-center hover:bg-black/60 transition-colors"
+                  >
+                    <FontAwesomeIcon icon={faArrowRight} style={{ fontSize: "8px" }} />
+                  </button>
+                ) : <span />}
+              </div>
+            )}
+          </div>
+        ))}
+
+        {/* Add slot */}
+        {images.length < 5 && (
+          <button
+            type="button"
+            onClick={() => fileInputRef.current?.click()}
+            className="aspect-square rounded-xl border-2 border-dashed border-gray-200 flex flex-col items-center justify-center gap-1.5 hover:border-primary/50 hover:bg-primary/5 transition-all text-gray-400 hover:text-primary"
+          >
+            <FontAwesomeIcon icon={faUpload} className="text-lg" />
+            <span className="text-[10px] font-medium">Thêm ảnh</span>
+          </button>
+        )}
+      </div>
+
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept="image/*"
+        multiple
+        className="hidden"
+        onChange={(e) => e.target.files && handleFileSelect(e.target.files)}
+      />
+
+      {images.length === 0 && (
+        <p className="mt-2 text-[11px] text-gray-400">
+          Click ô "Thêm ảnh" hoặc kéo thả file ảnh vào đây.
+        </p>
+      )}
+    </div>
+  );
+}
 
 // ==================== MODAL COMPONENT ====================
 function ProductModal({
@@ -73,6 +266,16 @@ function ProductModal({
 }) {
   const [form, setForm] = useState<ProductForm>(() => {
     if (mode === "edit" && initial) {
+      // Ưu tiên dùng images (có publicId), fallback về imageUrls
+      const images: ImageEntry[] = initial.images?.length
+        ? initial.images
+            .sort((a, b) => a.sortOrder - b.sortOrder)
+            .map((img) => ({
+              url: img.imageUrl,
+              publicId: img.cloudinaryPublicId,
+            }))
+        : (initial.imageUrls || []).map((url) => ({ url, publicId: null }));
+
       return {
         name: initial.name,
         price: String(initial.price),
@@ -83,7 +286,7 @@ function ProductModal({
         shippingInfo: initial.shippingInfo || "",
         ingredients: initial.ingredients?.join(", ") || "",
         freshGuarantee: initial.freshGuarantee ?? true,
-        imageUrls: initial.imageUrls?.length ? initial.imageUrls : [""],
+        images,
       };
     }
     return EMPTY_FORM;
@@ -92,25 +295,24 @@ function ProductModal({
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const set = (field: keyof ProductForm, value: unknown) =>
-    setForm((f) => ({ ...f, [field]: value }));
+  const set = <K extends keyof ProductForm>(
+    field: K,
+    value: ProductForm[K] | ((prev: ProductForm[K]) => ProductForm[K])
+  ) =>
+    setForm((f) => ({
+      ...f,
+      [field]: typeof value === "function" ? (value as any)(f[field]) : value,
+    }));
 
-  const setImageUrl = (i: number, val: string) =>
-    setForm((f) => {
-      const urls = [...f.imageUrls];
-      urls[i] = val;
-      return { ...f, imageUrls: urls };
-    });
-
-  const addImageUrl = () =>
-    setForm((f) => ({ ...f, imageUrls: [...f.imageUrls, ""] }));
-
-  const removeImageUrl = (i: number) =>
-    setForm((f) => ({ ...f, imageUrls: f.imageUrls.filter((_, idx) => idx !== i) }));
+  const hasUploadingImages = form.images.some((img) => img.uploading);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!form.name.trim() || !form.price) return;
+    if (hasUploadingImages) {
+      setError("Vui lòng đợi ảnh upload xong trước khi lưu.");
+      return;
+    }
     setSaving(true);
     setError(null);
 
@@ -124,7 +326,9 @@ function ProductModal({
       shippingInfo: form.shippingInfo.trim(),
       ingredients: form.ingredients.trim(),
       freshGuarantee: form.freshGuarantee,
-      imageUrls: form.imageUrls.filter((u) => u.trim() !== ""),
+      images: form.images
+        .filter((img) => img.url && !img.error)
+        .map((img) => ({ url: img.url, publicId: img.publicId ?? "" })),
     };
 
     try {
@@ -179,12 +383,12 @@ function ProductModal({
             </div>
             <div>
               <label className="block text-[11px] font-bold uppercase tracking-widest text-gray-400 mb-1.5">
-                Giá (nghìn VND) *
+                Giá (VND) *
               </label>
               <input
-                type="number" required min="0" step="0.01" value={form.price}
+                type="number" required min="0" step="1" value={form.price}
                 onChange={(e) => set("price", e.target.value)}
-                placeholder="VD: 45 (= 45.000đ)"
+                placeholder="VD: 45000 (= 45.000đ)"
                 className="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm outline-none focus:border-primary/50 focus:ring-2 focus:ring-primary/10 transition-all"
               />
             </div>
@@ -272,42 +476,11 @@ function ProductModal({
             />
           </div>
 
-          {/* Ảnh sản phẩm */}
-          <div>
-            <label className="block text-[11px] font-bold uppercase tracking-widest text-gray-400 mb-1.5">
-              <FontAwesomeIcon icon={faImage} className="mr-1" />
-              URL ảnh sản phẩm (ảnh đầu = ảnh chính)
-            </label>
-            <div className="space-y-2">
-              {form.imageUrls.map((url, i) => (
-                <div key={i} className="flex gap-2 items-center">
-                  <span className="text-[11px] text-gray-400 w-5 text-right shrink-0">{i + 1}.</span>
-                  <input
-                    type="text" value={url}
-                    onChange={(e) => setImageUrl(i, e.target.value)}
-                    placeholder="https://..."
-                    className="flex-1 px-3 py-2 rounded-xl border border-gray-200 text-sm outline-none focus:border-primary/50 transition-all"
-                  />
-                  {url && (
-                    <img src={url} alt="" className="w-8 h-8 rounded-lg object-cover border border-gray-100 shrink-0"
-                      onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }} />
-                  )}
-                  {form.imageUrls.length > 1 && (
-                    <button type="button" onClick={() => removeImageUrl(i)}
-                      className="text-gray-300 hover:text-red-500 transition-colors shrink-0">
-                      <FontAwesomeIcon icon={faTimes} size="xs" />
-                    </button>
-                  )}
-                </div>
-              ))}
-              {form.imageUrls.length < 5 && (
-                <button type="button" onClick={addImageUrl}
-                  className="text-[12px] text-primary hover:underline flex items-center gap-1 mt-1">
-                  <FontAwesomeIcon icon={faPlus} size="xs" /> Thêm ảnh
-                </button>
-              )}
-            </div>
-          </div>
+          {/* Ảnh sản phẩm — Upload Grid */}
+          <ImageUploadGrid
+            images={form.images}
+            onChange={(imgs) => set("images", imgs)}
+          />
 
           {/* Tươi nguyên chất */}
           <label className="flex items-center gap-3 cursor-pointer group">
@@ -326,11 +499,13 @@ function ProductModal({
               className="flex-1 py-3 rounded-xl border border-gray-200 text-sm font-semibold text-gray-500 hover:bg-gray-50 transition-all">
               Hủy
             </button>
-            <button type="submit" disabled={saving}
+            <button type="submit" disabled={saving || hasUploadingImages}
               className="flex-1 py-3 rounded-xl bg-primary text-white text-sm font-semibold hover:bg-[#7a0001] transition-all disabled:opacity-60 flex items-center justify-center gap-2">
               {saving
                 ? <><FontAwesomeIcon icon={faSpinner} className="animate-spin" /> Đang lưu...</>
-                : <><FontAwesomeIcon icon={faCheck} /> {mode === "create" ? "Thêm sản phẩm" : "Lưu thay đổi"}</>
+                : hasUploadingImages
+                  ? <><FontAwesomeIcon icon={faSpinner} className="animate-spin" /> Đang upload ảnh...</>
+                  : <><FontAwesomeIcon icon={faCheck} /> {mode === "create" ? "Thêm sản phẩm" : "Lưu thay đổi"}</>
               }
             </button>
           </div>
@@ -425,7 +600,7 @@ export default function AdminProductManagement() {
           <div className="bg-white rounded-2xl shadow-2xl p-6 w-80 text-center">
             <div className="text-4xl mb-3">🗑️</div>
             <h3 className="font-lora text-lg font-bold text-gray-800 mb-2">Xóa sản phẩm?</h3>
-            <p className="text-sm text-gray-500 mb-5">Hành động này không thể hoàn tác.</p>
+            <p className="text-sm text-gray-500 mb-5">Hành động này không thể hoàn tác. Ảnh sản phẩm sẽ bị xóa khỏi Cloudinary.</p>
             <div className="flex gap-3">
               <button onClick={() => setDeleteConfirmId(null)}
                 className="flex-1 py-2.5 rounded-xl border border-gray-200 text-sm font-semibold text-gray-500 hover:bg-gray-50 transition-all">

@@ -113,9 +113,9 @@ export default function ProductDetailContent({
           <div className="mb-5 flex items-baseline gap-3 flex-wrap">
             {(() => {
               const hasDiscount = product.discountPercent != null && product.discountPercent > 0;
-              const originalPrice = product.price * quantity * 1000;
+              const originalPrice = product.price * quantity;
               const salePrice = hasDiscount && product.currentPrice
-                ? product.currentPrice * quantity * 1000
+                ? product.currentPrice * quantity
                 : originalPrice;
               const formatVND = (n: number) =>
                 new Intl.NumberFormat("vi-VN", { style: "currency", currency: "VND" }).format(n);
@@ -137,7 +137,7 @@ export default function ProductDetailContent({
                   )}
                   {quantity > 1 && (
                     <span className="text-gray-400 text-[14px]">
-                      ({formatVND(hasDiscount && product.currentPrice ? product.currentPrice * 1000 : product.price * 1000)} / cái)
+                      ({formatVND(hasDiscount && product.currentPrice ? product.currentPrice : product.price)} / cái)
                     </span>
                   )}
                 </>
