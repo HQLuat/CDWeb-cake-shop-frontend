@@ -7,6 +7,13 @@ export interface ReviewDTO {
   createdAt: string;
 }
 
+// ==================== PRODUCT IMAGE ====================
+export interface ProductImageDTO {
+  imageUrl: string;
+  cloudinaryPublicId: string | null;
+  sortOrder: number;
+}
+
 // ==================== PRODUCT ====================
 export interface ProductSummary {
   [x: string]: any;
@@ -20,6 +27,7 @@ export interface ProductSummary {
   averageRating: number;
   totalReviews: number;
   imageUrls: string[];
+  images?: ProductImageDTO[];   // bổ sung từ backend (admin)
 }
 
 export interface ProductDetail extends ProductSummary {
