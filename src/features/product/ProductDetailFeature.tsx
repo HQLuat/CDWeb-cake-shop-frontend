@@ -46,7 +46,7 @@ export default function ProductDetailFeature() {
   }
 
   return (
-    <main className="mt-20 mb-20">
+    <main className="mt-10 mb-20">
       <ProductDetailContent
         key={selectedProduct.id}
         product={selectedProduct}
