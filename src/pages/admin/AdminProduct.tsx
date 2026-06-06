@@ -14,6 +14,7 @@ interface ImageEntry {
   uploading?: boolean;   // đang upload
   error?: string;        // lỗi upload
   localPreview?: string; // blob URL tạm
+  isExisting?: boolean;  // ảnh đã có sẵn từ trước (đã lưu DB)
 }
 
 interface ProductForm {
@@ -76,9 +77,13 @@ const fmtVND = (v: number) =>
 function ImageUploadGrid({
   images,
   onChange,
+  onUploadSuccess,
+  onImageRemoved,
 }: {
   images: ImageEntry[];
   onChange: (images: ImageEntry[] | ((prev: ImageEntry[]) => ImageEntry[])) => void;
+  onUploadSuccess?: (publicId: string) => void;
+  onImageRemoved?: (publicId: string) => void;
 }) {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -108,6 +113,9 @@ function ImageUploadGrid({
             formData,
             { headers: { "Content-Type": "multipart/form-data" } }
           );
+          if (res.data.publicId && onUploadSuccess) {
+            onUploadSuccess(res.data.publicId);
+          }
           return { url: res.data.url, publicId: res.data.publicId, uploading: false } as ImageEntry;
         } catch {
           return {
@@ -131,7 +139,18 @@ function ImageUploadGrid({
     });
   };
 
-  const removeImage = (idx: number) => {
+  const removeImage = async (idx: number) => {
+    const img = images[idx];
+    if (!img.isExisting && img.publicId) {
+      try {
+        await axiosClient.delete(`/admin/products/delete-image?publicId=${img.publicId}`);
+        if (onImageRemoved) {
+          onImageRemoved(img.publicId);
+        }
+      } catch (err) {
+        console.error("Lỗi khi xóa ảnh trên Cloudinary:", err);
+      }
+    }
     const next = [...images];
     if (next[idx].localPreview) URL.revokeObjectURL(next[idx].localPreview!);
     next.splice(idx, 1);
@@ -264,6 +283,9 @@ function ProductModal({
   onClose: () => void;
   onSaved: () => void;
 }) {
+  const uploadedNewPublicIds = useRef<Set<string>>(new Set());
+  const isSaved = useRef(false);
+
   const [form, setForm] = useState<ProductForm>(() => {
     if (mode === "edit" && initial) {
       // Ưu tiên dùng images (có publicId), fallback về imageUrls
@@ -273,8 +295,9 @@ function ProductModal({
             .map((img) => ({
               url: img.imageUrl,
               publicId: img.cloudinaryPublicId,
+              isExisting: true,
             }))
-        : (initial.imageUrls || []).map((url) => ({ url, publicId: null }));
+        : (initial.imageUrls || []).map((url) => ({ url, publicId: null, isExisting: true }));
 
       return {
         name: initial.name,
@@ -294,6 +317,21 @@ function ProductModal({
 
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (!isSaved.current && uploadedNewPublicIds.current.size > 0) {
+        const pidsToDelete = Array.from(uploadedNewPublicIds.current);
+        pidsToDelete.forEach(async (pid) => {
+          try {
+            await axiosClient.delete(`/admin/products/delete-image?publicId=${pid}`);
+          } catch (err) {
+            console.error(`Lỗi khi dọn dẹp ảnh tạm ${pid} trên Cloudinary:`, err);
+          }
+        });
+      }
+    };
+  }, []);
 
   const set = <K extends keyof ProductForm>(
     field: K,
@@ -337,6 +375,7 @@ function ProductModal({
       } else {
         await axiosClient.put(`/admin/products/${initial!.id}`, payload);
       }
+      isSaved.current = true;
       onSaved();
       onClose();
     } catch (err: unknown) {
@@ -480,6 +519,8 @@ function ProductModal({
           <ImageUploadGrid
             images={form.images}
             onChange={(imgs) => set("images", imgs)}
+            onUploadSuccess={(pid) => uploadedNewPublicIds.current.add(pid)}
+            onImageRemoved={(pid) => uploadedNewPublicIds.current.delete(pid)}
           />
 
           {/* Tươi nguyên chất */}
