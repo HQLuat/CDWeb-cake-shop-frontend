@@ -153,8 +153,8 @@ export default function CheckoutPage() {
         {/* Global Errors */}
         {(createError || paymentError) && (
           <div className="mb-6 p-4 bg-red-50 border border-red-200 text-red-600 text-sm rounded-xl space-y-1">
-            {createError && <p>⚠️ Lỗi đặt hàng: {createError}</p>}
-            {paymentError && <p>⚠️ Lỗi thanh toán: {paymentError}</p>}
+            {createError && <p>Lỗi đặt hàng: {createError}</p>}
+            {paymentError && <p>Lỗi thanh toán: {paymentError}</p>}
           </div>
         )}
 
@@ -179,11 +179,10 @@ export default function CheckoutPage() {
                     onBlur={() => setAddressTouched(true)}
                     disabled={isSubmitting}
                     placeholder="Số nhà, tên đường, phường/xã, quận/huyện, thành phố..."
-                    className={`w-full bg-gray-50 border rounded-xl px-4 py-3 text-sm outline-none transition-all ${
-                      addressTouched && !shippingAddress.trim()
+                    className={`w-full bg-gray-50 border rounded-xl px-4 py-3 text-sm outline-none transition-all ${addressTouched && !shippingAddress.trim()
                         ? "border-red-500 focus:border-red-500 bg-red-50/20"
                         : "border-gray-200 focus:border-primary"
-                    }`}
+                      }`}
                   />
                   {addressTouched && !shippingAddress.trim() && (
                     <p className="text-red-500 text-xs mt-1.5 font-medium">
@@ -218,11 +217,6 @@ export default function CheckoutPage() {
                   </h4>
                   <div className="flex items-center justify-between bg-white px-4 py-3.5 rounded-xl border border-primary/20 shadow-sm">
                     <div className="flex items-center gap-3">
-                      <img
-                        src="https://sandbox.vnpayment.vn/paymentv2/Images/brands/logo-vnpay.png"
-                        alt="VNPay"
-                        className="h-6 object-contain"
-                      />
                       <span className="text-sm font-bold text-gray-800">
                         Cổng thanh toán VNPay (Thẻ ATM/QR/Tín dụng)
                       </span>

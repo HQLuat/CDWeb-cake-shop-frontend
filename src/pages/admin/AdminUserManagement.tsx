@@ -352,7 +352,7 @@ export default function AdminUserManagement() {
           <p className="text-sm text-gray-500 mt-0.5">
             {isLoading
               ? "Đang tải..."
-              : `Tổng cộng ${totalElements.toLocaleString("vi-VN")} người dùng trong hệ thống`}
+              : `${totalElements.toLocaleString("vi-VN")} người dùng trong hệ thống`}
           </p>
         </div>
       </div>
@@ -451,12 +451,12 @@ export default function AdminUserManagement() {
           <table className="w-full text-left border-collapse">
             <thead>
               <tr className="bg-gray-50 border-b border-gray-100 text-gray-400 text-[11px] font-semibold uppercase tracking-wider">
-                <th className="py-4 px-6">ID</th>
-                <th className="py-4 px-6">Người dùng</th>
-                <th className="py-4 px-6">Vai trò</th>
-                <th className="py-4 px-6">Số điện thoại</th>
-                <th className="py-4 px-6">Trạng thái</th>
-                <th className="py-4 px-6 text-center">Hành động</th>
+                <th className="py-4 px-5">ID</th>
+                <th className="py-4 px-5">Người dùng</th>
+                <th className="py-4 px-5">Vai trò</th>
+                <th className="py-4 px-5">Số điện thoại</th>
+                <th className="py-4 px-5">Trạng thái</th>
+                <th className="py-4 px-5 text-center">Hành động</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100 text-sm text-gray-700">
@@ -497,12 +497,12 @@ export default function AdminUserManagement() {
                       className="hover:bg-gray-50/60 transition-colors"
                     >
                       {/* ID */}
-                      <td className="py-4 px-6 font-bold text-gray-400 text-xs">
+                      <td className="py-4 px-5">
                         #{user.id}
                       </td>
 
                       {/* Người dùng */}
-                      <td className="py-4 px-6">
+                      <td className="py-4 px-5">
                         <div className="flex items-center gap-3">
                           <div className="w-8 h-8 rounded-full bg-gradient-to-br from-primary/20 to-primary/10 flex items-center justify-center text-primary text-xs shrink-0">
                             <FontAwesomeIcon icon={faUser} />
@@ -519,7 +519,7 @@ export default function AdminUserManagement() {
                       </td>
 
                       {/* Role */}
-                      <td className="py-4 px-6">
+                      <td className="py-4 px-5">
                         <span
                           className={`px-2.5 py-1 rounded-full text-xs font-semibold ${roleBadge.cls}`}
                         >
@@ -528,12 +528,12 @@ export default function AdminUserManagement() {
                       </td>
 
                       {/* Phone */}
-                      <td className="py-4 px-6 text-gray-600">
+                      <td className="py-4 px-5 text-gray-600">
                         {user.phone || "—"}
                       </td>
 
                       {/* Status */}
-                      <td className="py-4 px-6">
+                      <td className="py-4 px-5">
                         <span
                           className={`px-2.5 py-1 rounded-full text-xs font-semibold ${statusBadge.cls}`}
                         >
@@ -542,15 +542,15 @@ export default function AdminUserManagement() {
                       </td>
 
                       {/* Actions */}
-                      <td className="py-4 px-6">
+                      <td className="py-4 px-5">
                         <div className="flex justify-center">
                           <button
                             onClick={() => setViewingUserId(user.id)}
                             title="Xem chi tiết"
-                            className="flex items-center gap-1.5 px-3 py-1.5 text-blue-500 hover:bg-blue-50 rounded-lg transition-colors text-xs font-semibold border border-blue-100"
+                            className="flex items-center gap-1.5 px-3 py-1.5 text-blue-500 hover:bg-blue-50 rounded-lg transition-colors text-xs font-semibold border border-blue-100 cursor-pointer"
                           >
                             <FontAwesomeIcon icon={faEye} />
-                            Xem chi tiết
+                            Xem
                           </button>
                         </div>
                       </td>

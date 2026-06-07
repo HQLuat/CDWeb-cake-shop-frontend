@@ -5,6 +5,9 @@ import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { fetchProducts } from "./productThunk";
 import SkeletonCard from "./components/SkeletonCard";
 import ProductCard from "./components/ProductCard";
+import { Link } from "react-router-dom";
+import { banner3 } from "../../assets/productListPage";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 // ==================== CONSTANTS ====================
 const PAGE_SIZE = 9;
@@ -45,19 +48,19 @@ export default function ProductListFeature() {
 
   const priceRange = PRICE_RANGES[selectedPriceIdx];
 
-const load = useCallback(() => {
-  dispatch(
-    fetchProducts({
-      page: currentPage,
-      size: PAGE_SIZE,
-      search: search || undefined,
-      collection:
-        selectedCollection !== "Tất cả" ? selectedCollection : undefined,
-      minPrice: priceRange.min !== 0 ? priceRange.min : undefined,
-      maxPrice: priceRange.max ? priceRange.max : undefined,
-    }),
-  );
-}, [dispatch, currentPage, search, selectedCollection, priceRange]);
+  const load = useCallback(() => {
+    dispatch(
+      fetchProducts({
+        page: currentPage,
+        size: PAGE_SIZE,
+        search: search || undefined,
+        collection:
+          selectedCollection !== "Tất cả" ? selectedCollection : undefined,
+        minPrice: priceRange.min !== 0 ? priceRange.min : undefined,
+        maxPrice: priceRange.max ? priceRange.max : undefined,
+      }),
+    );
+  }, [dispatch, currentPage, search, selectedCollection, priceRange]);
 
   useEffect(() => {
     load();
@@ -115,22 +118,47 @@ const load = useCallback(() => {
   const products = productPage?.content ?? [];
 
   return (
-    <main className="mt-24 mb-20 bg-[#fff8f3] min-h-screen">
+    <main className="mt-20 mb-20 bg-[#fff8f3] min-h-screen">
       {/* Page Header */}
-      <div className="bg-white border-b border-gray-100">
-        <div className="max-w-7xl mx-auto px-6 py-10">
-          <span className="text-primary text-[11px] uppercase tracking-[3px] font-semibold">
-            The Signature Collection
-          </span>
-          <h1 className="font-lora text-[38px] mt-1.5 text-gray-800">
-            Thực Đơn Của Chúng Tôi
-          </h1>
-          <p className="text-gray-400 mt-1.5 text-[14px]">
-            {isLoadingList
-              ? "Đang tải..."
-              : `Khám phá ${totalElements.toLocaleString()} loại bánh thủ công tinh tế`}
-          </p>
+      <div className="bg-primary relative overflow-hidden bg-fixed">
+        {/* Overlay gradient for text readability */}
+        <div className="absolute inset-0 bg-gradient-to-r from-[#6D5B53] via-transparent to-transparent opacity-40" />
+
+        <div className="relative z-10 max-w-7xl mx-auto px-6 py-20 flex flex-col items-start justify-center min-h-[50vh]">
+          {/* Breadcrumb */}
+          <nav className="mb-6" aria-label="breadcrumb">
+            <ol className="flex items-center gap-1">
+              <li className="text-white/70 text-sm hover:text-white">
+                <Link to="/">Trang chủ</Link>
+              </li>
+              <li className="text-white/40 text-sm">/</li>
+              <li className="text-white/70 text-sm hover:text-white">
+                <Link to="/products">Sản phẩm</Link>
+              </li>
+            </ol>
+          </nav>
+
+          {/* Page Title & Description */}
+          <div className="text-left">
+            <span className="text-primary text-[11px] uppercase tracking-[3px] font-semibold bg-white/20 px-3 py-1 rounded-full backdrop-blur-sm">
+              The Signature Collection
+            </span>
+            <h1 className="font-lora text-[38px] md:text-[48px] mt-4 text-white leading-tight">
+              Thực Đơn Của Chúng Tôi
+            </h1>
+            <p className="text-white/90 mt-2 text-lg md:text-xl max-w-2xl">
+              {isLoadingList
+                ? "Đang tải..."
+                : `Khám phá ${totalElements.toLocaleString()} loại bánh thủ công tinh tế`}
+            </p>
+          </div>
         </div>
+
+        <img
+          src={banner3}
+          className="absolute bottom-[-270px] right-[-10px] w-[700px] h-[700px] object-contain pointer-events-none"
+          alt=""
+        />
       </div>
 
       <div className="max-w-7xl mx-auto px-6 py-8">
@@ -139,7 +167,7 @@ const load = useCallback(() => {
           <aside
             className={`w-60 shrink-0 ${showFilter ? "block" : "hidden"} md:block`}
           >
-            <div className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100 sticky top-28">
+            <div className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100 top-28">
               {/* Header */}
               <div className="flex items-center justify-between mb-5">
                 <h3 className="font-lora text-[17px] font-semibold text-gray-800">
@@ -166,11 +194,10 @@ const load = useCallback(() => {
                     <button
                       key={col}
                       onClick={() => handleCollectionChange(col)}
-                      className={`w-full text-left text-[13px] px-3 py-2 rounded-xl transition-all ${
-                        selectedCollection === col
-                          ? "bg-primary text-white font-medium shadow-sm"
-                          : "text-gray-500 hover:bg-[#fff0e8] hover:text-gray-800"
-                      }`}
+                      className={`w-full text-left text-[13px] px-3 py-2 rounded-xl transition-all ${selectedCollection === col
+                        ? "bg-primary text-white font-medium shadow-sm"
+                        : "text-gray-500 hover:bg-[#fff0e8] hover:text-gray-800"
+                        }`}
                     >
                       {col}
                     </button>
@@ -188,11 +215,10 @@ const load = useCallback(() => {
                     <button
                       key={range.label}
                       onClick={() => handlePriceChange(idx)}
-                      className={`w-full text-left text-[13px] px-3 py-2 rounded-xl transition-all ${
-                        selectedPriceIdx === idx
-                          ? "bg-primary text-white font-medium shadow-sm"
-                          : "text-gray-500 hover:bg-[#fff0e8] hover:text-gray-800"
-                      }`}
+                      className={`w-full text-left text-[13px] px-3 py-2 rounded-xl transition-all ${selectedPriceIdx === idx
+                        ? "bg-primary text-white font-medium shadow-sm"
+                        : "text-gray-500 hover:bg-[#fff0e8] hover:text-gray-800"
+                        }`}
                     >
                       {range.label}
                     </button>
@@ -336,9 +362,9 @@ const load = useCallback(() => {
                 <button
                   onClick={() => setCurrentPage((p) => Math.max(0, p - 1))}
                   disabled={currentPage === 0}
-                  className="px-4 py-2 rounded-full text-[13px] border border-gray-200 bg-white disabled:opacity-30 hover:border-primary hover:text-primary transition-all shadow-sm"
+                  className="px-4 py-2 rounded-full text-[13px] border border-gray-200 bg-white disabled:opacity-30 hover:border-primary hover:text-primary transition-all shadow-sm cursor-pointer"
                 >
-                  ← Trước
+                  <ChevronLeft size={17} />
                 </button>
 
                 {getPaginationRange().map((item, idx) =>
@@ -350,11 +376,10 @@ const load = useCallback(() => {
                     <button
                       key={item}
                       onClick={() => setCurrentPage(item as number)}
-                      className={`w-9 h-9 rounded-full text-[13px] font-medium transition-all shadow-sm ${
-                        currentPage === item
-                          ? "bg-primary text-white shadow-primary/20"
-                          : "bg-white border border-gray-200 hover:border-primary hover:text-primary"
-                      }`}
+                      className={`w-9 h-9 rounded-full text-[13px] font-medium transition-all shadow-sm cursor-pointer ${currentPage === item
+                        ? "bg-primary text-white shadow-primary/20"
+                        : "bg-white border border-gray-200 hover:border-primary hover:text-primary"
+                        }`}
                     >
                       {(item as number) + 1}
                     </button>
@@ -366,9 +391,9 @@ const load = useCallback(() => {
                     setCurrentPage((p) => Math.min(totalPages - 1, p + 1))
                   }
                   disabled={currentPage === totalPages - 1}
-                  className="px-4 py-2 rounded-full text-[13px] border border-gray-200 bg-white disabled:opacity-30 hover:border-primary hover:text-primary transition-all shadow-sm"
+                  className="px-4 py-2 rounded-full text-[13px] border border-gray-200 bg-white disabled:opacity-30 hover:border-primary hover:text-primary transition-all shadow-sm cursor-pointer"
                 >
-                  Sau →
+                  <ChevronRight size={17} />
                 </button>
               </div>
             )}

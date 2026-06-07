@@ -93,7 +93,7 @@ export default function MyOrdersPage() {
         {paymentError && (
           <div className="mb-6 p-4 bg-red-50 border border-red-200 text-red-600 text-sm rounded-xl flex items-center gap-2 shadow-sm">
             <FontAwesomeIcon icon={faExclamationTriangle} />
-            <span>⚠️ Không thể tiến hành thanh toán lại: {paymentError}</span>
+            <span>Không thể tiến hành thanh toán lại: {paymentError}</span>
           </div>
         )}
 
@@ -103,11 +103,10 @@ export default function MyOrdersPage() {
             <button
               key={tab.value}
               onClick={() => handleTabChange(tab.value)}
-              className={`pb-3 text-sm font-semibold tracking-wide border-b-2 transition-all relative px-2 cursor-pointer ${
-                activeTab === tab.value
-                  ? "border-primary text-primary"
-                  : "border-transparent text-gray-400 hover:text-gray-600"
-              }`}
+              className={`pb-3 text-sm font-semibold tracking-wide border-b-2 transition-all relative px-2 cursor-pointer ${activeTab === tab.value
+                ? "border-primary text-primary"
+                : "border-transparent text-gray-400 hover:text-gray-600"
+                }`}
             >
               {tab.label}
             </button>
@@ -165,7 +164,7 @@ export default function MyOrdersPage() {
                       </span>
                       <span className="text-gray-300">|</span>
                       <span
-                        className={`text-xs px-2.5 py-0.5 rounded-full font-medium uppercase tracking-wider ${getStatusStyle(
+                        className={`text-xs px-2.5 py-0.5 rounded-full font-medium tracking-wider ${getStatusStyle(
                           order.orderStatus
                         )}`}
                       >

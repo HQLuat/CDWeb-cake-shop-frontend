@@ -74,7 +74,7 @@ function AdminOrderFeature() {
           <p className="text-sm text-gray-500">
             {isLoading
               ? "Đang tải..."
-              : `Tổng cộng ${totalElements.toLocaleString("vi-VN")} đơn hàng`}
+              : `${totalElements.toLocaleString("vi-VN")} đơn hàng trong hệ thống`}
           </p>
         </div>
       </div>

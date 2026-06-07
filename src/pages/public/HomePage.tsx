@@ -119,9 +119,6 @@ function Home() {
                 </span>
                 <h2 className="font-lora text-[36px] text-gray-800">
                   Flash Sale
-                  <span className="ml-3 text-red-500 text-[22px] font-bold">
-                    🔥
-                  </span>
                 </h2>
                 <p className="text-gray-400 text-[14px] mt-1">
                   Giảm giá đặc biệt — số lượng có hạn, đặt ngay hôm nay!
@@ -287,9 +284,8 @@ function Home() {
                 return (
                   <div
                     key={product.id}
-                    className={`${
-                      isFirst ? "col-span-2 flex-row" : "flex-col"
-                    } bg-bg-surface rounded-[15px] overflow-hidden flex relative`}
+                    className={`${isFirst ? "col-span-2 flex-row" : "flex-col"
+                      } bg-bg-surface rounded-[15px] overflow-hidden flex relative`}
                   >
                     {/* Discount badge */}
                     {hasDiscount && (
@@ -300,9 +296,8 @@ function Home() {
 
                     {/* Image */}
                     <div
-                      className={`${
-                        isFirst ? "w-[60%] h-full order-2" : "h-50 order-1"
-                      } bg-white overflow-hidden`}
+                      className={`${isFirst ? "w-[60%] h-full order-2" : "h-50 order-1"
+                        } bg-white overflow-hidden`}
                     >
                       <img
                         src={currentImg}
@@ -313,9 +308,8 @@ function Home() {
 
                     {/* Text */}
                     <div
-                      className={`${
-                        isFirst ? "w-[40%] p-10 order-1" : "p-5 order-2"
-                      } flex flex-col justify-center grow bg-bg-main z-1`}
+                      className={`${isFirst ? "w-[40%] p-10 order-1" : "p-5 order-2"
+                        } flex flex-col justify-center grow bg-bg-main z-1`}
                     >
                       <div className="mb-2.5 flex justify-between items-start gap-2">
                         <h3 className="font-lora text-[18px] font-semibold line-clamp-2">
@@ -323,9 +317,8 @@ function Home() {
                         </h3>
                         <div className="flex flex-col items-end shrink-0">
                           <span
-                            className={`font-bold text-[16px] whitespace-nowrap ${
-                              hasDiscount ? "text-red-500" : "text-primary"
-                            }`}
+                            className={`font-bold text-[16px] whitespace-nowrap ${hasDiscount ? "text-red-500" : "text-primary"
+                              }`}
                           >
                             {formatVND(displayPrice)}
                           </span>
