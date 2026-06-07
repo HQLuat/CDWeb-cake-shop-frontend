@@ -6,6 +6,7 @@ import {
   faUpload, faArrowLeft, faArrowRight,
 } from "@fortawesome/free-solid-svg-icons";
 import axiosClient from "../../api/axiosClient";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 // ==================== TYPES ====================
 interface ImageEntry {
@@ -176,9 +177,8 @@ function ImageUploadGrid({
         {images.map((img, i) => (
           <div
             key={i}
-            className={`relative aspect-square rounded-xl overflow-hidden border-2 transition-all ${
-              i === 0 ? "border-primary/60 ring-2 ring-primary/20" : "border-gray-200"
-            }`}
+            className={`relative aspect-square rounded-xl overflow-hidden border-2 transition-all ${i === 0 ? "border-primary/60 ring-2 ring-primary/20" : "border-gray-200"
+              }`}
           >
             {/* Preview */}
             {img.uploading ? (
@@ -291,12 +291,12 @@ function ProductModal({
       // Ưu tiên dùng images (có publicId), fallback về imageUrls
       const images: ImageEntry[] = initial.images?.length
         ? initial.images
-            .sort((a, b) => a.sortOrder - b.sortOrder)
-            .map((img) => ({
-              url: img.imageUrl,
-              publicId: img.cloudinaryPublicId,
-              isExisting: true,
-            }))
+          .sort((a, b) => a.sortOrder - b.sortOrder)
+          .map((img) => ({
+            url: img.imageUrl,
+            publicId: img.cloudinaryPublicId,
+            isExisting: true,
+          }))
         : (initial.imageUrls || []).map((url) => ({ url, publicId: null, isExisting: true }));
 
       return {
@@ -803,12 +803,12 @@ export default function AdminProductManagement() {
                         <div className="flex justify-center gap-2">
                           <button
                             onClick={() => { setEditingProduct(product); setModalMode("edit"); }}
-                            className="flex items-center gap-1.5 px-3 py-1.5 text-blue-500 hover:bg-blue-50 rounded-lg transition-colors text-xs font-semibold border border-blue-100">
+                            className="flex items-center gap-1.5 px-3 py-1.5 text-blue-500 hover:bg-blue-50 rounded-lg transition-colors text-xs font-semibold border border-blue-100 cursor-pointer">
                             <FontAwesomeIcon icon={faEdit} /> Sửa
                           </button>
                           <button
                             onClick={() => setDeleteConfirmId(product.id)}
-                            className="flex items-center gap-1.5 px-3 py-1.5 text-red-500 hover:bg-red-50 rounded-lg transition-colors text-xs font-semibold border border-red-100">
+                            className="flex items-center gap-1.5 px-3 py-1.5 text-red-500 hover:bg-red-50 rounded-lg transition-colors text-xs font-semibold border border-red-100 cursor-pointer">
                             <FontAwesomeIcon icon={faTrashAlt} /> Xóa
                           </button>
                         </div>
@@ -828,22 +828,26 @@ export default function AdminProductManagement() {
           <button
             onClick={() => setCurrentPage((p) => Math.max(0, p - 1))}
             disabled={currentPage === 0}
-            className="px-4 py-2 rounded-xl text-sm border border-gray-200 bg-white disabled:opacity-30 hover:border-primary hover:text-primary transition-all">
-            ← Trước
+            className="px-4 py-2 rounded-full text-[13px] border border-gray-200 bg-white disabled:opacity-30 hover:border-primary hover:text-primary transition-all shadow-sm cursor-pointer"
+          >
+            <ChevronLeft size={17} />
           </button>
           {Array.from({ length: totalPages }, (_, i) => (
             <button key={i} onClick={() => setCurrentPage(i)}
-              className={`w-9 h-9 rounded-xl text-sm font-medium transition-all ${
-                currentPage === i ? "bg-primary text-white" : "bg-white border border-gray-200 hover:border-primary hover:text-primary"
-              }`}>
+              className={`w-9 h-9 rounded-full text-[13px] font-medium transition-all shadow-sm cursor-pointer ${currentPage === i
+                ? "bg-primary text-white shadow-primary/20"
+                : "bg-white border border-gray-200 hover:border-primary hover:text-primary"
+                }`}
+            >
               {i + 1}
             </button>
           ))}
           <button
             onClick={() => setCurrentPage((p) => Math.min(totalPages - 1, p + 1))}
             disabled={currentPage === totalPages - 1}
-            className="px-4 py-2 rounded-xl text-sm border border-gray-200 bg-white disabled:opacity-30 hover:border-primary hover:text-primary transition-all">
-            Sau →
+            className="px-4 py-2 rounded-full text-[13px] border border-gray-200 bg-white disabled:opacity-30 hover:border-primary hover:text-primary transition-all shadow-sm cursor-pointer"
+          >
+            <ChevronRight size={17} />
           </button>
         </div>
       )}

@@ -29,9 +29,8 @@ function OrderTable({
 }: OrderTableProps) {
   return (
     <div
-      className={`bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden transition-opacity ${
-        isLoading || isUpdating ? "opacity-60 pointer-events-none" : ""
-      }`}
+      className={`bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden transition-opacity ${isLoading || isUpdating ? "opacity-60 pointer-events-none" : ""
+        }`}
     >
       {/* Loading indicator */}
       {(isLoading || isUpdating) && (
@@ -46,14 +45,14 @@ function OrderTable({
       <div className="overflow-x-auto">
         <table className="w-full text-left border-collapse">
           <thead>
-            <tr className="bg-gray-50 border-b border-gray-100 text-gray-500 text-xs font-semibold uppercase tracking-wider">
-              <th className="py-4 px-6">Mã đơn</th>
-              <th className="py-4 px-6">Khách hàng</th>
-              <th className="py-4 px-6">Ngày đặt</th>
-              <th className="py-4 px-6">Tổng tiền</th>
-              <th className="py-4 px-6">Thanh toán</th>
-              <th className="py-4 px-6">Trạng thái</th>
-              <th className="py-4 px-6 text-center">Hành động</th>
+            <tr className="bg-gray-50 border-b border-gray-100 text-gray-400 text-[11px] font-semibold uppercase tracking-wider">
+              <th className="py-4 px-5">Mã đơn</th>
+              <th className="py-4 px-5">Khách hàng</th>
+              <th className="py-4 px-5">Ngày đặt</th>
+              <th className="py-4 px-5">Tổng tiền</th>
+              <th className="py-4 px-5">Thanh toán</th>
+              <th className="py-4 px-5">Trạng thái</th>
+              <th className="py-4 px-5 text-center">Hành động</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-100 text-sm text-gray-700">
@@ -71,35 +70,36 @@ function OrderTable({
               orders.map((order) => (
                 <tr
                   key={order.id}
-                  className="hover:bg-gray-50/50 transition-colors"
+                  className="hover:bg-gray-50/60 transition-colors"
                 >
-                  <td className="py-4 px-6 font-bold text-gray-800">
+                  <td className="py-4 px-5">
                     #{order.id}
                   </td>
-                  <td className="py-4 px-6 font-medium text-gray-700">
+                  <td className="py-4 px-5">
                     {order.username}
                   </td>
-                  <td className="py-4 px-6 text-gray-500">
+                  <td className="py-4 px-5">
                     {formatDate(order.createdAt)}
                   </td>
-                  <td className="py-4 px-6 font-semibold text-primary">
+                  <td className="py-4 px-5">
                     {formatCurrency(order.totalAmount)}
                   </td>
-                  <td className="py-4 px-6 text-xs text-gray-500">
+                  <td className="py-4 px-5">
                     {order.paymentStatus}
                   </td>
-                  <td className="py-4 px-6">
+                  <td className="py-4 px-5">
                     <OrderStatusBadge status={order.orderStatus} />
                   </td>
-                  <td className="py-4 px-6">
+                  <td className="py-4 px-5">
                     <div className="flex justify-center gap-2">
                       {/* View detail */}
                       <button
                         onClick={() => onViewDetail(order)}
-                        className="p-1.5 text-gray-500 hover:bg-gray-100 rounded-lg transition-colors"
+                        className="flex items-center gap-1.5 px-3 py-1.5 text-blue-500 hover:bg-blue-50 rounded-lg transition-colors text-xs font-semibold border border-blue-100 cursor-pointer"
                         title="Xem chi tiết"
                       >
                         <FontAwesomeIcon icon={faEye} />
+                        Xem
                       </button>
 
                       {/* PENDING → CONFIRMED | CANCELLED */}
@@ -109,19 +109,21 @@ function OrderTable({
                             onClick={() =>
                               onUpdateStatus(order.id, "CONFIRMED")
                             }
-                            className="p-1.5 text-blue-500 hover:bg-blue-50 rounded-lg transition-colors"
+                            className="flex items-center gap-1.5 px-3 py-1.5 text-blue-500 hover:bg-blue-50 rounded-lg transition-colors text-xs font-semibold border border-blue-100 cursor-pointer"
                             title="Xác nhận đơn"
                           >
                             <FontAwesomeIcon icon={faCheck} />
+                            Xác nhận
                           </button>
                           <button
                             onClick={() =>
                               onUpdateStatus(order.id, "CANCELLED")
                             }
-                            className="p-1.5 text-red-500 hover:bg-red-50 rounded-lg transition-colors"
+                            className="flex items-center gap-1.5 px-3 py-1.5 text-red-500 hover:bg-red-50 rounded-lg transition-colors text-xs font-semibold border border-red-100 cursor-pointer"
                             title="Hủy đơn"
                           >
                             <FontAwesomeIcon icon={faBan} />
+                            Hủy đơn
                           </button>
                         </>
                       )}
@@ -133,19 +135,21 @@ function OrderTable({
                             onClick={() =>
                               onUpdateStatus(order.id, "SHIPPING")
                             }
-                            className="p-1.5 text-indigo-500 hover:bg-indigo-50 rounded-lg transition-colors"
+                            className="flex items-center gap-1.5 px-3 py-1.5 text-indigo-500 hover:bg-indigo-50 rounded-lg transition-colors text-xs font-semibold border border-indigo-100 cursor-pointer"
                             title="Giao hàng"
                           >
                             <FontAwesomeIcon icon={faShippingFast} />
+                            Giao hàng
                           </button>
                           <button
                             onClick={() =>
                               onUpdateStatus(order.id, "CANCELLED")
                             }
-                            className="p-1.5 text-red-500 hover:bg-red-50 rounded-lg transition-colors"
+                            className="flex items-center gap-1.5 px-3 py-1.5 text-red-500 hover:bg-red-50 rounded-lg transition-colors text-xs font-semibold border border-red-100 cursor-pointer"
                             title="Hủy đơn"
                           >
                             <FontAwesomeIcon icon={faBan} />
+                            Hủy đơn
                           </button>
                         </>
                       )}
@@ -156,7 +160,7 @@ function OrderTable({
                           onClick={() =>
                             onUpdateStatus(order.id, "COMPLETED")
                           }
-                          className="p-1.5 text-green-500 hover:bg-green-50 rounded-lg transition-colors"
+                          className="p-1.5 text-green-500 hover:bg-green-50 rounded-lg transition-colors cursor-pointer"
                           title="Hoàn thành"
                         >
                           <FontAwesomeIcon icon={faCheckCircle} />

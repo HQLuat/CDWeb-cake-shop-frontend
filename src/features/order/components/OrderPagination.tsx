@@ -1,3 +1,5 @@
+import { ChevronLeft, ChevronRight } from "lucide-react";
+
 interface OrderPaginationProps {
   currentPage: number;
   totalPages: number;
@@ -37,9 +39,9 @@ function OrderPagination({
       <button
         onClick={() => onPageChange(Math.max(1, currentPage - 1))}
         disabled={currentPage === 1}
-        className="px-4 py-2 rounded-full text-[13px] border border-gray-200 bg-white disabled:opacity-30 hover:border-primary hover:text-primary transition-all shadow-sm"
+        className="px-4 py-2 rounded-full text-[13px] border border-gray-200 bg-white disabled:opacity-30 hover:border-primary hover:text-primary transition-all shadow-sm cursor-pointer"
       >
-        ← Trước
+        <ChevronLeft size={17} />
       </button>
 
       {getPaginationRange(currentPage, totalPages).map((item, idx) =>
@@ -51,11 +53,10 @@ function OrderPagination({
           <button
             key={item}
             onClick={() => onPageChange(item as number)}
-            className={`w-9 h-9 rounded-full text-[13px] font-medium transition-all shadow-sm ${
-              currentPage === item
-                ? "bg-primary text-white shadow-primary/20"
-                : "bg-white border border-gray-200 hover:border-primary hover:text-primary"
-            }`}
+            className={`w-9 h-9 rounded-full text-[13px] font-medium transition-all shadow-sm cursor-pointer ${currentPage === item
+              ? "bg-primary text-white shadow-primary/20"
+              : "bg-white border border-gray-200 hover:border-primary hover:text-primary"
+              }`}
           >
             {item as number}
           </button>
@@ -65,9 +66,9 @@ function OrderPagination({
       <button
         onClick={() => onPageChange(Math.min(totalPages, currentPage + 1))}
         disabled={currentPage === totalPages}
-        className="px-4 py-2 rounded-full text-[13px] border border-gray-200 bg-white disabled:opacity-30 hover:border-primary hover:text-primary transition-all shadow-sm"
+        className="px-4 py-2 rounded-full text-[13px] border border-gray-200 bg-white disabled:opacity-30 hover:border-primary hover:text-primary transition-all shadow-sm cursor-pointer"
       >
-        Sau →
+        <ChevronRight size={17} />
       </button>
     </div>
   );

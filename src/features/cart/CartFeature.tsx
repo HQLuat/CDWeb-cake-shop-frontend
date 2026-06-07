@@ -5,7 +5,6 @@ import {
   faTrashAlt,
   faPlus,
   faMinus,
-  faTicketAlt,
   faShoppingBag,
   faSpinner,
 } from "@fortawesome/free-solid-svg-icons";
@@ -18,18 +17,11 @@ import {
 } from "./cartThunk";
 import { ArrowLeft, Trash2 } from "lucide-react";
 
-const PROMO_CODES: Record<string, number> = { VELVETMUSE: 50000 };
-
 export default function CartFeature() {
   const dispatch = useAppDispatch();
   const { cart, isLoading, error } = useAppSelector((state) => state.cart);
 
-  const [promoCode, setPromoCode] = useState("");
   const [discount, setDiscount] = useState(0);
-  const [promoMessage, setPromoMessage] = useState<{
-    text: string;
-    ok: boolean;
-  } | null>(null);
 
   useEffect(() => {
     dispatch(fetchCart());
@@ -55,23 +47,6 @@ export default function CartFeature() {
     if (window.confirm("Bạn có chắc muốn xóa toàn bộ giỏ hàng không?")) {
       dispatch(clearCart());
       setDiscount(0);
-      setPromoCode("");
-      setPromoMessage(null);
-    }
-  };
-
-  const handleApplyPromo = (e: React.FormEvent) => {
-    e.preventDefault();
-    const code = promoCode.trim().toUpperCase();
-    if (PROMO_CODES[code]) {
-      setDiscount(PROMO_CODES[code]);
-      setPromoMessage({
-        text: `Áp dụng mã giảm giá thành công! Giảm ${PROMO_CODES[code].toLocaleString("vi-VN")}đ`,
-        ok: true,
-      });
-    } else {
-      setDiscount(0);
-      setPromoMessage({ text: "Mã giảm giá không hợp lệ.", ok: false });
     }
   };
 
@@ -231,39 +206,6 @@ export default function CartFeature() {
 
           {/* Cột tổng kết */}
           <div className="space-y-6">
-            {/* Mã giảm giá */}
-            <div className="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm">
-              <h3 className="text-sm font-bold text-gray-800 mb-3 flex items-center gap-2">
-                <FontAwesomeIcon icon={faTicketAlt} className="text-gray-400" />{" "}
-                Mã Giảm Giá
-              </h3>
-              <form onSubmit={handleApplyPromo} className="flex gap-2">
-                <input
-                  type="text"
-                  placeholder="Nhập mã (VD: VELVETMUSE)"
-                  value={promoCode}
-                  onChange={(e) => {
-                    setPromoCode(e.target.value);
-                    setPromoMessage(null);
-                  }}
-                  className="flex-1 bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-xs outline-none focus:border-primary uppercase font-medium tracking-wider"
-                />
-                <button
-                  type="submit"
-                  className="bg-gray-800 hover:bg-gray-900 text-white text-xs font-semibold px-4 py-2 rounded-xl transition-all"
-                >
-                  Áp dụng
-                </button>
-              </form>
-              {promoMessage && (
-                <p
-                  className={`mt-2 text-xs ${promoMessage.ok ? "text-green-600" : "text-red-500"}`}
-                >
-                  {promoMessage.text}
-                </p>
-              )}
-            </div>
-
             {/* Tóm tắt đơn hàng */}
             <div className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm space-y-4">
               <h3 className="text-base font-bold text-gray-800 border-b border-gray-100 pb-3 font-lora">

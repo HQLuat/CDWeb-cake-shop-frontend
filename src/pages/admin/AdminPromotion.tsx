@@ -1,13 +1,11 @@
 import { useState, useEffect, useCallback, type ReactNode } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faTag,
   faSearch,
   faPercent,
   faTimes,
   faCheck,
   faSpinner,
-  faFire,
   faTrashAlt,
   faLayerGroup,
 } from "@fortawesome/free-solid-svg-icons";
@@ -160,8 +158,8 @@ export default function AdminPromotion() {
       filterMode === "all"
         ? true
         : filterMode === "active"
-        ? p.discountPercent !== null
-        : p.discountPercent === null;
+          ? p.discountPercent !== null
+          : p.discountPercent === null;
     return matchSearch && matchMode;
   });
 
@@ -198,21 +196,11 @@ export default function AdminPromotion() {
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
         <div>
           <h1 className="text-2xl font-bold text-gray-800 font-lora flex items-center gap-2">
-            <FontAwesomeIcon icon={faTag} className="text-primary text-xl" />
             Quản Lý Khuyến Mãi
           </h1>
           <p className="text-sm text-gray-500 mt-1">
-            Thiết lập % giảm giá cho từng sản phẩm — cập nhật ngay lập tức trên
-            trang khách hàng.
-          </p>
-        </div>
-
-        {/* Stats badge */}
-        <div className="flex items-center gap-3">
-          <div className="bg-orange-50 border border-orange-100 text-orange-600 rounded-xl px-4 py-2 text-sm font-semibold flex items-center gap-2">
-            <FontAwesomeIcon icon={faFire} />
             {activeCount} sản phẩm đang giảm giá
-          </div>
+          </p>
         </div>
       </div>
 
@@ -229,11 +217,10 @@ export default function AdminPromotion() {
               <button
                 key={d}
                 onClick={() => setBulkDiscount(String(d))}
-                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all border ${
-                  bulkDiscount === String(d)
-                    ? "bg-primary text-white border-primary"
-                    : "bg-white text-gray-600 border-gray-200 hover:border-primary hover:text-primary"
-                }`}
+                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all border ${bulkDiscount === String(d)
+                  ? "bg-primary text-white border-primary"
+                  : "bg-white text-gray-600 border-gray-200 hover:border-primary hover:text-primary"
+                  }`}
               >
                 -{d}%
               </button>
@@ -273,33 +260,39 @@ export default function AdminPromotion() {
       )}
 
       {/* ===== SEARCH & FILTER ===== */}
-      <div className="flex flex-col md:flex-row gap-3 mb-6">
-        <div className="flex-1 flex items-center bg-white rounded-xl px-4 py-3 border border-gray-200 shadow-sm">
-          <FontAwesomeIcon icon={faSearch} className="text-gray-400 mr-3" />
+      <div className="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex flex-col md:flex-row gap-3 mb-6">
+        {/* Search */}
+        <div className="flex-1 flex items-center bg-gray-50 rounded-xl px-4 py-2.5 border border-gray-200 gap-3">
+          <FontAwesomeIcon icon={faSearch} className="text-gray-400 shrink-0" />
           <input
             type="text"
-            placeholder="Tìm theo tên sản phẩm..."
+            placeholder="Tìm tên sản phẩm..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="w-full bg-transparent outline-none text-sm text-gray-700"
           />
+          {searchTerm && (
+            <button onClick={() => setSearchTerm("")} className="text-gray-400 hover:text-gray-700">
+              <FontAwesomeIcon icon={faTimes} size="xs" />
+            </button>
+          )}
         </div>
+
         <div className="flex gap-2">
           {(["all", "active", "inactive"] as const).map((mode) => (
             <button
               key={mode}
               onClick={() => setFilterMode(mode)}
-              className={`px-4 py-2.5 rounded-xl text-sm font-medium transition-all border ${
-                filterMode === mode
-                  ? "bg-primary text-white border-primary shadow-sm"
-                  : "bg-white text-gray-500 border-gray-200 hover:border-primary hover:text-primary"
-              }`}
+              className={`px-4 py-2.5 rounded-xl text-sm font-medium transition-all border cursor-pointer ${filterMode === mode
+                ? "bg-primary text-white border-primary shadow-sm"
+                : "bg-white text-gray-500 border-gray-200 hover:border-primary hover:text-primary"
+                }`}
             >
               {mode === "all"
                 ? "Tất cả"
                 : mode === "active"
-                ? "Đang giảm"
-                : "Chưa giảm"}
+                  ? "Đang giảm"
+                  : "Chưa giảm"}
             </button>
           ))}
         </div>
@@ -374,9 +367,8 @@ export default function AdminPromotion() {
                     return (
                       <tr
                         key={product.id}
-                        className={`hover:bg-gray-50/60 transition-colors ${
-                          isSelected ? "bg-primary/5" : ""
-                        }`}
+                        className={`hover:bg-gray-50/60 transition-colors ${isSelected ? "bg-primary/5" : ""
+                          }`}
                       >
                         {/* Checkbox */}
                         <td className="py-4 px-4">
@@ -449,13 +441,13 @@ export default function AdminPromotion() {
                                   if (pct >= 1 && pct <= 99)
                                     applyDiscount(product.id, pct);
                                 }}
-                                className="w-7 h-7 flex items-center justify-center bg-green-500 text-white rounded-lg hover:bg-green-600 transition-all text-xs"
+                                className="w-7 h-7 flex items-center justify-center bg-green-500 text-white rounded-lg hover:bg-green-600 transition-all text-xs cursor-pointer"
                               >
                                 <FontAwesomeIcon icon={faCheck} />
                               </button>
                               <button
                                 onClick={() => setEditingId(null)}
-                                className="w-7 h-7 flex items-center justify-center bg-gray-100 text-gray-500 rounded-lg hover:bg-gray-200 transition-all text-xs"
+                                className="w-7 h-7 flex items-center justify-center bg-gray-100 text-gray-500 rounded-lg hover:bg-gray-200 transition-all text-xs cursor-pointer"
                               >
                                 <FontAwesomeIcon icon={faTimes} />
                               </button>
@@ -554,13 +546,6 @@ export default function AdminPromotion() {
           </div>
         )}
       </div>
-
-      {/* ===== LEGEND ===== */}
-      <p className="text-xs text-gray-400 mt-4 text-center">
-        💡 Click vào ô <strong>% Giảm</strong> để chỉnh sửa trực tiếp · Dùng
-        nút nhanh <strong>-10% / -20% / -30%</strong> hoặc chọn nhiều sản phẩm
-        để áp dụng hàng loạt
-      </p>
     </div>
   );
 }
