@@ -21,13 +21,7 @@ function Home() {
     dispatch(fetchPromoProducts());
   }, [dispatch]);
 
-  const backupImages = [
-    "https://i.pinimg.com/736x/79/0c/8b/790c8b07d5869dee8ceab42ea5ed8d8f.jpg",
-    "https://i.pinimg.com/736x/16/46/3d/16463d7aa39c47d3f720ef0ec932c885.jpg",
-    "https://i.pinimg.com/736x/30/9d/63/309d63c5fb68a856a69a0803ecd90068.jpg",
-    "https://i.pinimg.com/736x/38/70/22/38702204789a6531c5ad8f8ba9c1c982.jpg",
-    "https://i.pinimg.com/1200x/9b/98/c7/9b98c7ec8a35300f627cad7047c9563e.jpg",
-  ];
+
 
   const formatVND = (amount: number) =>
     new Intl.NumberFormat("vi-VN", { style: "currency", currency: "VND" }).format(amount);
@@ -276,7 +270,7 @@ function Home() {
               featuredProducts.map((product, index) => {
                 const isFirst = index === 0;
                 const currentImg =
-                  product.imageUrls?.[0] || backupImages[index] || backupImages[0];
+                  product.imageUrls?.[0];
                 const hasDiscount =
                   product.discountPercent != null && product.discountPercent > 0;
                 const displayPrice = product.currentPrice ?? product.price;
